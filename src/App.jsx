@@ -40,12 +40,12 @@ function App() {
     <BrowserRouter>
       <div className="max-w-[768px] w-full mx-auto flex flex-col h-screen">
         {/* Navbar */}
-        <div className="fixed top-0 w-full z-99">
+        <div className="fixed -top-0.5 w-full z-99">
           <NavbarComponent />
         </div>
 
         {/* Contents */}
-        <div className="flex-grow pt-[69px] pb-[55px] transition-all duration-300 ease-in-out border border-gray-300">
+        <div className="flex-grow pt-[67px] pb-[55px] transition-all duration-300 ease-in-out">
           {loading ? (
             <SpawnLoading />
           ) : (

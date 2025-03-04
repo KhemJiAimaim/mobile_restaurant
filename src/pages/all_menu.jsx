@@ -6,24 +6,28 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 function all_menu() {
   const swiperRef = useRef(null);
   const { cateId } = useParams();
-  const [selectedCate, setSelectedCate] = useState(cateId || 1);
 
-  // console.log("cateId : " ,selectedCate);
+  const queryParams = new URLSearchParams(location.search);
+  const bestSellerFilter = queryParams.get("bestseller"); // ดึงค่าพารามิเตอร์ bestseller
+  const [selectedCate, setSelectedCate] = useState(cateId ? Number(cateId) : 1);
 
   useEffect(() => {
     if (cateId) {
-      setSelectedCate(cateId);
+      setSelectedCate(Number(cateId));
     }
   }, [cateId]);
 
-  const filteredFoodDetail = selectedCate
-    ? foodDetail.filter((item) => item.cateID === parseInt(selectedCate))
-    : foodDetail;
+  const filteredFoodDetail = foodDetail.filter((item) => {
+    if (bestSellerFilter) {
+      return item.bestSeller === 1;
+    }
+    return selectedCate ? item.cateID === selectedCate : true; // กรองตาม cateID
+  });
 
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
@@ -33,7 +37,10 @@ function all_menu() {
 
   return (
     <>
-      <div className="bg-white flex flex-col overflow-auto p-4 gap-4">
+      <div className={`bg-white flex flex-col overflow-auto p-4 ${
+          bestSellerFilter !== "1" ? "gap-4" : "gap-0"
+        }`}
+      >
         <div className="w-full mx-auto relative ">
           <Swiper
             ref={swiperRef}
@@ -46,33 +53,37 @@ function all_menu() {
             }}
             className="swiper-container items-center"
           >
-            {cate.map((item, index) => (
-              <SwiperSlide key={index} onClick={() => setSelectedCate(item.id)}>
-                <Link
-                  to="/all-menu"
-                  className={`w-full flex flex-col gap-2 justify-center items-center flex-shrink-0 hover:bg-[#FFCC44] rounded-xl py-2 px-3 ${
-                    selectedCate === item.id || cateId === item.id
-                      ? "bg-[#FFCC44]"
-                      : ""
-                  }`}
+            {bestSellerFilter !== "1" &&
+              cate.map((item, index) => (
+                <SwiperSlide
+                  key={index}
+                  onClick={() => setSelectedCate(item.id)}
                 >
-                  <figure className="w-[52px] h-[53px] rounded-md">
-                    <img
-                      src={item.images}
-                      alt={item.name}
-                      className="w-full h-full"
-                    />
-                  </figure>
-                  <p className="font-[500] md:text-base text-sm text-black">
-                    {item.name}
-                  </p>
-                </Link>
-              </SwiperSlide>
-            ))}
+                  <Link
+                    to="/all-menu"
+                    className={`w-full flex flex-col gap-2 justify-center items-center flex-shrink-0 hover:bg-[#FFCC44] rounded-xl py-2 px-3 ${
+                      selectedCate === item.id || cateId === item.id
+                        ? "bg-[#FFCC44]"
+                        : ""
+                    }`}
+                  >
+                    <figure className="w-[52px] h-[53px] rounded-md">
+                      <img
+                        src={item.images}
+                        alt={item.name}
+                        className="w-full h-full"
+                      />
+                    </figure>
+                    <p className="font-[500] md:text-base text-sm text-black">
+                      {item.name}
+                    </p>
+                  </Link>
+                </SwiperSlide>
+              ))}
           </Swiper>
         </div>
 
-        <div className="grid md:grid-cols-3 grid-cols-2 md:gap-6 gap-2 place-items-center ">
+        <div className="grid md:grid-cols-3 grid-cols-2 md:gap-6 gap-3 place-items-center ">
           {filteredFoodDetail.map((item, index) => (
             <Link
               to={`/detail/${item.id}`}

@@ -6,6 +6,20 @@ const ListOrders = ({ onOrderToKitchen }) => {
   const [count, setCount] = useState(0);
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
+  const [height, setHeight] = useState(window.innerHeight);
+
+
+ useEffect(() => {
+    const updateSize = () => setHeight(window.innerHeight);
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  const reducedHeight = window.innerWidth >= 768
+  ? height - 250
+  : window.innerWidth >= 360
+  ? height - 240
+  : height - 200;
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -62,7 +76,7 @@ const ListOrders = ({ onOrderToKitchen }) => {
   return (
     <>
       <div className="h-full flex flex-col justify-between gap-3">
-        <div className="md:h-[660px] xxl:h-[435px] xxx:h-[370px] xss:h-[415px] h-[400px] overflow-y-auto">
+        <div style={{ height: `calc(${reducedHeight}px)` }} className="overflow-y-auto">
           <div className="grid md:grid-cols-2 grid-cols-1 gap-3">
             {cartItems.length === 0 ? (
               <div className="flex justify-center w-full items-center col-span-2">
@@ -154,12 +168,12 @@ const ListOrders = ({ onOrderToKitchen }) => {
           </div>
         </div>
 
-        <div className="flex flex-row justify-center gap-6 mt-4">
+        <div className="flex flex-row justify-center gap-6 ">
           <div
             className="bg-[#013D59] rounded-lg w-[180px] p-1 mx-auto flex justify-center items-center gap-2"
             onClick={() => navigate(-1)}
           >
-            <p className="text-white text-[25px] font-[500]">ย้อนกลับ</p>
+            <p className="text-white text-[20px] font-[500]">ย้อนกลับ</p>
           </div>
 
           <button
@@ -167,7 +181,7 @@ const ListOrders = ({ onOrderToKitchen }) => {
             onClick={handleOrderClick}
             disabled={cartItems.length === 0}
           >
-            <p className="text-white text-[25px] font-[500]">ดำเนินการ</p>
+            <p className="text-white text-[20px] font-[500]">ดำเนินการ</p>
           </button>
         </div>
       </div>

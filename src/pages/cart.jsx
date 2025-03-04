@@ -18,16 +18,16 @@ function Cart({onOrder}) {
   return (
     <div className="flex flex-col gap-4 bg-white w-full">
       {/* Header Tabs */}
-      <div className="grid grid-cols-2 place-items-center items-center fixed p-4 bg-white max-w-[768px] w-full">
+      <div className="grid grid-cols-2 place-items-center items-center fixed px-4 py-3 bg-white max-w-[768px] w-full">
         <div className="w-full cursor-pointer group">
-          <Link to="/cart?tab=orders" className="text-[25px] font-[400] text-center block">
+          <Link to="/cart?tab=orders" className="text-[20px] font-[400] text-center block">
             รายการที่สั่ง
           </Link>
           <div className={`rounded-full h-[6px] md:w-[35%] w-[60%] mx-auto ${activeTab === "orders" ? "border-t-6 border-[#FFBA41]" : ""}`}></div>
         </div>
 
         <div className="w-full cursor-pointer group">
-          <Link to="/cart?tab=status" className="text-[25px] font-[400] text-center block">
+          <Link to="/cart?tab=status" className="text-[20px] font-[400] text-center block">
             สถานะ
           </Link>
           <div className={`rounded-full h-[6px] md:w-[35%] w-[60%] mx-auto ${activeTab === "status" ? "border-t-6 border-[#FFBA41]" : ""}`}></div>
@@ -36,7 +36,7 @@ function Cart({onOrder}) {
       </div>
 
       {/* Content */}
-      <div className="max-h-full pt-[80px] md:px-6 px-4">
+      <div className="max-h-full pt-[60px] md:px-6 px-4">
         {activeTab === "orders" && <ListOrders  onOrderToKitchen={onOrder}/>}
         {activeTab === "status" && <StatusOrders />}
       </div>

@@ -158,7 +158,7 @@ const FooterComponent = ({ onEmployeeClick }) => {
                 <div className="border-t border-[#8F8F8F]/50 rounded-full mx-2"></div>
 
                 <Link
-                  to="/all-menu"
+                  to="/all-menu?bestseller=1"
                   className="text-base hover:bg-[#FFBA41] p-1 px-2 rounded-lg"
                 >
                   สินค้าขายดี

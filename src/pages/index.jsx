@@ -32,7 +32,7 @@ function index() {
           </p>
           <div className="border-t border-white w-full mb-2 rounded-full"></div>
           <Link
-            to="/all-menu"
+            to="/all-menu?bestseller=1"
             className="border border-white mb-2 rounded-full w-[70px] flex-shrink-0 hover:bg-[#FFBA41] "
           >
             <p className="text-white text-center tracking-[1px]">ทั้งหมด</p>

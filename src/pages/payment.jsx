@@ -5,8 +5,8 @@ import "dayjs/locale/th";
 
 const Payment = ({ onPaymentClick }) => {
   const [height, setHeight] = useState(window.innerHeight);
-  const [tax, setTaxTotal] = useState(1);
-  const [serviceCharge, setServiceCharge] = useState(1);
+  const [tax, setTaxTotal] = useState(0.07);
+  const [serviceCharge, setServiceCharge] = useState(0.05);
 
   useEffect(() => {
     const updateSize = () => setHeight(window.innerHeight);
@@ -110,7 +110,7 @@ const Payment = ({ onPaymentClick }) => {
                     )}
 
                     <p className="text-[15px] font-[500]">
-                      {/* ราที่ลดแล้ว คูณกับ จำนวน */}
+                      {/* ราคาที่ลดแล้ว คูณกับ จำนวน */}
                       {item.discount
                         ? formatNumber(
                             (item.price - item.discount) * item.count
@@ -120,7 +120,7 @@ const Payment = ({ onPaymentClick }) => {
                   </div>
                 </div>
 
-                <p className="text-[12px] font-[300]">{item.name}</p>
+                <p className="text-[12px] font-[300] max-w-[50%] w-full">{item.detail}</p>
               </div>
             ))}
           </div>

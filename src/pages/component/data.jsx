@@ -9,7 +9,7 @@ export const foodDetail = [
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด
     images: "/images/img/Rectangle 912.png", //รูป
     status: "อยู่ระหว่างปรุง", //สถานะ
-    BestSeller: 0,
+    bestSeller: 0, //สินค้าขายดี
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ export const foodDetail = [
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Rectangle 1131.png",
     status: "พร้อมเสริฟ",
-    BestSeller: 0,
+    bestSeller: 0,
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ export const foodDetail = [
     detail: "",
     images: "/images/img/Rectangle 1141.png",
     status: "รายการครบ",
-    BestSeller: 1,
+    bestSeller: 1,
   },
   {
     id: 4,
@@ -47,7 +47,7 @@ export const foodDetail = [
       "Lorem ipsum dolor sit amet consectetur. Quis quisque bibendum tortor massa eget nunc.",
     images: "/images/img/Rectangle 1136.png",
     status: "ยกเลิก",
-    BestSeller: 0,
+    bestSeller: 1,
   },
   {
     id: 5,
@@ -59,7 +59,7 @@ export const foodDetail = [
     detail: "ไม่ใส่หอม ไม่ใสเผ็ด ไม่เค็ม ผัดน้ำแทนน้ำมัน", //รายละเอียด
     images: "/images/img/moo-deng.jpg", //รูป
     status: "อยู่ระหว่างปรุง", //สถานะ
-    bestSeller: 1,
+    bestSeller: 1, //สินค้าขายดี
   },
   {
     id: 6,
