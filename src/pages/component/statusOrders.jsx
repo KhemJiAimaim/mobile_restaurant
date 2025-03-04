@@ -49,7 +49,7 @@ const StatusOrders = () => {
 
                 <div className="w-full flex flex-col justify-start items-center gap-2 max-md:h-auto">
                   <div className="flex flex-row justify-between items-start w-full gap-2">
-                    <p className="text-base font-[500] w-full">{item.name}</p>
+                    <p className="text-base font-[500] w-full md:h-[50px]">{item.name}</p>
 
                     <div className="w-[19px] h-auto">
                       <figure className="w-[19px] h-[19px]">
@@ -88,13 +88,13 @@ const StatusOrders = () => {
                       </p>
                     </div>
                   </div>
-
+                  {item.detail && (
                   <div className="flex flex-col justify-start items-start w-full gap-0.5 ">
                     <p className="text-[10px] font-[500] text-[#8F8F8F]">
                       หมายเหตุ
                     </p>
                     <p className="text-[12px] font-[300]">{item.detail}</p>
-                  </div>
+                  </div>)}
                 </div>
               </div>
             ))

@@ -43,7 +43,7 @@ const FooterComponent = ({ onEmployeeClick }) => {
 
   return (
     <>
-      <div className="max-w-[768px] w-full bg-[#FFBA41] rounded-t-3xl md:px-6 px-4 py-1.5 md:h-[55px] h-[55px]">
+      <div className="max-w-[768px] w-full bg-[#FFBA41] rounded-t-3xl md:px-6 px-4 py-1.5 h-[55px]">
         <div className="grid grid-cols-3 items-center w-full">
           {/* 1 */}
           <div
@@ -150,7 +150,7 @@ const FooterComponent = ({ onEmployeeClick }) => {
                 }`}
               >
                 <Link
-                  to="/"
+                  to="/all-menu"
                   className="text-base hover:bg-[#FFBA41] p-1 px-2 rounded-lg"
                 >
                   รายการอาหาร

@@ -54,8 +54,7 @@ function App() {
               <Route path="/index" element={<IndexPages />} />
               <Route path="/all-menu" element={<MenuPages />} />
               <Route path="/all-menu/:cateId" element={<MenuPages />} />
-
-              <Route path="/detail:id" element={<DetailMenu />} />
+              <Route path="/detail/:id" element={<DetailMenu />} />
               <Route
                 path="/cart"
                 element={

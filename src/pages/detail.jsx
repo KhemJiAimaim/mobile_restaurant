@@ -10,7 +10,11 @@ const DetailPage = () => {
   const [text, setText] = useState("");
   const [count, setCount] = useState(1);
 
-  const formatNumber = (num) => Number(num).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const formatNumber = (num) =>
+    Number(num).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
   const handleIncrement = () => {
     setCount(count + 1); // เพิ่มจำนวน
@@ -46,7 +50,7 @@ const DetailPage = () => {
   };
   const cateName = cate.find((item) => item.id === menu.cateID);
   return (
-    <div className="md:px-6 px-4 py-4 max-w-[768px] flex flex-col justify-center gap-6">
+    <div className="md:px-6 px-4 py-4 max-w-[768px] h-full flex flex-col justify-between gap-6 ">
       <div className="flex justify-start items-center gap-4">
         <div
           className="w-[40px] h-[40px] flex justify-center items-center bg-[#FFBA41] rounded-full cursor-pointer"
@@ -89,20 +93,25 @@ const DetailPage = () => {
         </div>
       </div>
 
-      <div className="flex flex-row justify-between">
-        <div className="flex flex-col justify-end md:w-[30%] w-full">
-          <p className="text-[#8F8F8F] text-[20px] text-right line-through">
-            {formatNumber(menu.price)}.00
-          </p>
-          <div className="flex flex-row justify-between w-full">
-            <p className="text-[30px]">฿</p>
-            <p className="text-[30px] font-[600] text-right">
-              {formatNumber(menu.price - menu.discount)}
+      <div className="flex flex-row justify-start ">
+        <div className="flex flex-col justify-end md:w-[30%] w-full items-end">
+          {menu.discount && (
+            <p className="text-[#8F8F8F] text-[20px] text-right line-through">
+              {formatNumber(menu.price)}
             </p>
+          )}
+
+          <div className="w-full flex flex-row justify-between items-end">
+            <p className="text-[30px] font-[600] leading-none">฿</p>
+            <span className="text-[30px] font-[600] leading-none">
+              {menu.discount
+                    ? formatNumber((menu.price - menu.discount) * count)
+                    : formatNumber(menu.price * count)}
+            </span>
           </div>
         </div>
 
-        <div className="w-full flex flex-row justify-end items-center gap-4">
+        <div className="w-full flex flex-row justify-end items-end gap-4">
           <figure
             className="btn-minus w-[40px] h-[40px] cursor-pointer"
             onClick={handleDecrement}
@@ -141,7 +150,7 @@ const DetailPage = () => {
             className="w-full h-full object-contain"
           />
         </figure>
-        <p className="text-white text-[25px] font-[500]">ใส่ตะกร้า</p>
+        <p className="text-white text-[20px] font-[500]">ใส่ตะกร้า</p>
       </div>
     </div>
   );

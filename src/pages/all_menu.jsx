@@ -11,7 +11,7 @@ import { Link, useParams } from "react-router-dom";
 function all_menu() {
   const swiperRef = useRef(null);
   const { cateId } = useParams();
-  const [selectedCate, setSelectedCate] = useState(cateId || null);
+  const [selectedCate, setSelectedCate] = useState(cateId || 1);
 
   // console.log("cateId : " ,selectedCate);
 
@@ -20,10 +20,10 @@ function all_menu() {
       setSelectedCate(cateId);
     }
   }, [cateId]);
-  
+
   const filteredFoodDetail = selectedCate
-  ? foodDetail.filter((item) => item.cateID === parseInt(selectedCate))
-  : foodDetail;
+    ? foodDetail.filter((item) => item.cateID === parseInt(selectedCate))
+    : foodDetail;
 
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
@@ -51,7 +51,9 @@ function all_menu() {
                 <Link
                   to="/all-menu"
                   className={`w-full flex flex-col gap-2 justify-center items-center flex-shrink-0 hover:bg-[#FFCC44] rounded-xl py-2 px-3 ${
-                    selectedCate === item.id || cateId === item.id ? "bg-[#FFCC44]" : ""
+                    selectedCate === item.id || cateId === item.id
+                      ? "bg-[#FFCC44]"
+                      : ""
                   }`}
                 >
                   <figure className="w-[52px] h-[53px] rounded-md">
@@ -88,14 +90,20 @@ function all_menu() {
                 <p className="line-clamp-2 text-left md:text-base text-[15px] h-[50px]">
                   {item.name}
                 </p>
-                <p className="text-[#8F8F8F] text-[10px] text-right line-through">
-                  {formatNumber(item.price)} ฿
-                </p>
-                <div className="flex flex-row items-center justify-end">
-                  <p className="text-base font-[600]">
-                    {formatNumber(item.price - item.discount)}
+
+                {item.discount && (
+                  <p className="text-[#8F8F8F] text-[8px] text-right line-through">
+                    {formatNumber(item.price)}
                   </p>
-                  <p className="text-[10px]">฿</p>
+                )}
+
+                <div className="flex flex-row items-center justify-end gap-0.5">
+                  <p className="text-base font-[600]">
+                    {item.discount
+                      ? formatNumber(item.price - item.discount)
+                      : formatNumber(item.price)}
+                  </p>
+                  <p className="text-[14px]">฿</p>
                 </div>
               </div>
             </Link>
