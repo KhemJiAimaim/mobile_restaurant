@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 const FooterComponent = ({ onEmployeeClick }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [openLang, setOpenLang] = useState(false);
   const langRef = useRef(null);
   const menuRef = useRef(null);
+  const location = useLocation();
 
   const handleToggleMenu = () => {
     setOpenMenu((prev) => !prev);
@@ -149,44 +150,69 @@ const FooterComponent = ({ onEmployeeClick }) => {
                     : "opacity-0 scale-95 pointer-events-none"
                 }`}
               >
-                <Link
+                <NavLink
                   to="/all-menu"
-                  className="text-base hover:bg-[#FFBA41] p-1 px-2 rounded-lg"
+                  className={({ isActive }) =>
+                    `text-base p-1 px-2 rounded-lg ${
+                      isActive && location.search !== "?bestseller=1"
+                        ? "bg-[#FFBA41]"
+                        : "hover:bg-[#FFBA41]"
+                    }`
+                  }
                 >
                   รายการอาหาร
-                </Link>
+                </NavLink>
                 <div className="border-t border-[#8F8F8F]/50 rounded-full mx-2"></div>
 
-                <Link
+                <NavLink
                   to="/all-menu?bestseller=1"
-                  className="text-base hover:bg-[#FFBA41] p-1 px-2 rounded-lg"
+                  className={`text-base p-1 px-2 rounded-lg ${
+                    location.pathname === "/all-menu" &&
+                    location.search === "?bestseller=1"
+                      ? "bg-[#FFBA41]"
+                      : "hover:bg-[#FFBA41]"
+                  }`}
                 >
                   สินค้าขายดี
-                </Link>
+                </NavLink>
                 <div className="border-t border-[#8F8F8F]/50 rounded-full mx-2"></div>
 
-                <Link
+                <NavLink
                   to="/cart?tab=orders"
-                  className="text-base hover:bg-[#FFBA41] p-1 px-2 rounded-lg"
+                  className={`text-base p-1 px-2 rounded-lg ${
+                    location.pathname === "/cart" &&
+                    location.search === "?tab=orders"
+                      ? "bg-[#FFBA41]"
+                      : "hover:bg-[#FFBA41]"
+                  }`}
                 >
                   รายการที่สั่ง
-                </Link>
+                </NavLink>
                 <div className="border-t border-[#8F8F8F]/50 rounded-full mx-2"></div>
 
-                <Link
+                <NavLink
                   to="/cart?tab=status"
-                  className="text-base hover:bg-[#FFBA41] p-1 px-2 rounded-lg"
+                  className={`text-base p-1 px-2 rounded-lg ${
+                    location.pathname === "/cart" &&
+                    location.search === "?tab=status"
+                      ? "bg-[#FFBA41]"
+                      : "hover:bg-[#FFBA41]"
+                  }`}
                 >
                   สถานะรายการ
-                </Link>
+                </NavLink>
                 <div className="border-t border-[#8F8F8F]/50 rounded-full mx-2"></div>
 
-                <Link
+                <NavLink
                   to="/payment"
-                  className="text-base hover:bg-[#FFBA41] p-1 px-2 rounded-lg"
+                  className={({ isActive }) =>
+                    `text-base p-1 px-2 rounded-lg ${
+                      isActive ? "bg-[#FFBA41]" : "hover:bg-[#FFBA41]"
+                    }`
+                  }
                 >
                   ชำระเงิน
-                </Link>
+                </NavLink>
                 <div className="border-t border-[#8F8F8F]/50 rounded-full mx-2"></div>
               </div>
             </div>
