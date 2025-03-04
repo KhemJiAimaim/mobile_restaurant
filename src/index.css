@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
+@import "tailwindcss";
+@theme {
+  --breakpoint-xxl: 400px;
+  --breakpoint-xxs: 391px;
+  --breakpoint-xxx: 375px;
+  --breakpoint-xss: 360px;
+}
+
+body {
+  font-family: "Noto Sans Thai", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  color: #313131;
+}
