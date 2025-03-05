@@ -119,5 +119,11 @@ export const cate = [
   { id: 2, name: "ของผัด", images: "/images/icon/cate/cooking-pot 2 (1).png" },
   { id: 3, name: "ต้ม/แกง", images: "/images/icon/cate/cooking-pot 1.png" },
   { id: 4, name: "สลัด", images: "/images/icon/cate/cooking-pot 2 (2).png" },
-  { id: 5, name: "ของหวาน", images: "/images/icon/cate/cooking-pot 2 (3).png" },
+  // { id: 5, name: "ของหวาน", images: "/images/icon/cate/cooking-pot 2 (3).png" },
+  // { id: 6, name: "เครื่องดื่ม", images: "/images/icon/cate/coke.png" },
+  // { id: 7, name: "แอลกอฮอล์", images: "/images/icon/cate/alcohol.png" },
+  // { id: 8, name: "ส้มตำ", images: "/images/icon/cate/salad.png" },
+  // { id: 9, name: "a1", images: "/images/icon/cate/alcohol.png" },
+  // { id: 10, name: "a2", images: "/images/icon/cate/salad.png" },
+
 ];

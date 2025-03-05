@@ -77,8 +77,8 @@ const StatusOrders = () => {
                         {item.name}
                       </p>
 
-                      <div className="w-[19px] h-auto">
-                        <figure className="w-[19px] h-[19px]">
+                      <div className="w-[25px] h-auto">
+                        <figure className="w-[25px] h-[25px]">
                           <img
                             src="/images/icon/trash.png"
                             alt=""
