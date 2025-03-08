@@ -31,15 +31,15 @@ const StatusOrders = () => {
   const totals = foodDetail.reduce(
     (accumulator, row) => {
       accumulator.price += row.price || 0;
-      accumulator.discount += row.discount || 0;
+      accumulator.specialPrice += row.specialPrice || 0;
       return accumulator;
     },
     {
       price: 0,
-      discount: 0,
+      specialPrice: 0,
     }
   );
-  const finalPrice = totals.price - totals.discount;
+  const finalPrice = totals.price - totals.specialPrice;
 
   return (
     <>
@@ -91,7 +91,7 @@ const StatusOrders = () => {
                       <div className="flex flex-row justify-between w-full items-center">
                         <p className="text-[20px] font-[400]">฿</p>
                         <p className="text-[20px] font-[500]">
-                          {formatNumber(item.price - item.discount)}
+                          {formatNumber(item.specialPrice)}
                         </p>
                       </div>
                       <div

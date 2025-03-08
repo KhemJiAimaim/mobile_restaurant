@@ -35,9 +35,9 @@ const DetailPage = () => {
     const item = {
       id: menu.id,
       name: menu.name,
-      price: menu.price - menu.discount,
+      price: menu.price - menu.specialPrice,
       originalPrice: menu.price,
-      discount: menu.discount,
+      specialPrice: menu.specialPrice,
       count,
       note: text,
       image: menu.images,
@@ -95,7 +95,7 @@ const DetailPage = () => {
 
       <div className="flex flex-row justify-start ">
         <div className="flex flex-col justify-end md:w-[30%] w-full items-end">
-          {menu.discount && (
+          {menu.specialPrice && (
             <p className="text-[#8F8F8F] text-[20px] text-right line-through">
               {formatNumber(menu.price)}
             </p>
@@ -104,8 +104,8 @@ const DetailPage = () => {
           <div className="w-full flex flex-row justify-between items-end">
             <p className="text-[30px] font-[600] leading-none">฿</p>
             <span className="text-[30px] font-[600] leading-none">
-              {menu.discount
-                    ? formatNumber((menu.price - menu.discount) * count)
+              {menu.specialPrice
+                    ? formatNumber((menu.specialPrice) * count)
                     : formatNumber(menu.price * count)}
             </span>
           </div>

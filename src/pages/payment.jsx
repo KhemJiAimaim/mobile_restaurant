@@ -5,8 +5,8 @@ import "dayjs/locale/th";
 
 const Payment = ({ onPaymentClick }) => {
   const [height, setHeight] = useState(window.innerHeight);
-  const [tax, setTaxTotal] = useState(0.07);
-  const [serviceCharge, setServiceCharge] = useState(0.05);
+  const [tax, setTaxTotal] = useState(7);
+  const [serviceCharge, setServiceCharge] = useState(5);
 
   useEffect(() => {
     const updateSize = () => setHeight(window.innerHeight);
@@ -27,9 +27,8 @@ const Payment = ({ onPaymentClick }) => {
         : window.innerWidth >= 360
         ? height - 510
         : height - 400
-
-      //ถ้าไม่มี tax และ serviceCharge
-      :window.innerWidth >= 768
+      : //ถ้าไม่มี tax และ serviceCharge
+      window.innerWidth >= 768
       ? height - 590
       : window.innerWidth >= 360
       ? height - 300
@@ -45,15 +44,23 @@ const Payment = ({ onPaymentClick }) => {
     (sum, item) => sum + item.price * item.count,
     0
   );
-  const totalDiscount = foodDetail.reduce(
-    (sum, item) => sum + item.discount * item.count,
+
+  const totalSpecialPrice = foodDetail.reduce(
+    (sum, item) => sum + item.specialPrice * item.count,
     0
   );
 
-  const netTotal = totalPrice - totalDiscount;
-  const taxTotal = netTotal * tax;
-  const serviceChargeTotal = netTotal * serviceCharge;
-  const grandTotal = netTotal + tax + serviceCharge;
+  const totalDiscount = totalPrice - totalSpecialPrice;
+
+  const serviceChargeTotal = totalSpecialPrice * (5 / 100);
+
+  const grandTotal = totalSpecialPrice + serviceChargeTotal;
+
+  const taxTotal = grandTotal * (7 / 100);
+
+  const Tatal = grandTotal + taxTotal;
+
+  console.log(Tatal);
 
   //ปัดเป็นจำนวนเต็ม
   // const tax = Math.round(netTotal * 0.07);
@@ -89,7 +96,7 @@ const Payment = ({ onPaymentClick }) => {
 
           <div
             style={{ height: `calc(${reducedHeight}px)` }}
-            className="overflow-auto w-full flex flex-col"
+            className="overflow-auto w-full flex flex-col gap-1"
           >
             {foodDetail.map((item, index) => (
               <div key={index} className="flex flex-col items-start">
@@ -103,7 +110,7 @@ const Payment = ({ onPaymentClick }) => {
                   </p>
 
                   <div className="w-full flex flex-col justify-end text-right flex-1">
-                    {item.discount && (
+                    {item.specialPrice && (
                       <p className="text-[12px] font-[300] line-through">
                         {formatNumber(item.price * item.count)}
                       </p>
@@ -111,16 +118,16 @@ const Payment = ({ onPaymentClick }) => {
 
                     <p className="text-[15px] font-[500]">
                       {/* ราคาที่ลดแล้ว คูณกับ จำนวน */}
-                      {item.discount
-                        ? formatNumber(
-                            (item.price - item.discount) * item.count
-                          )
+                      {item.specialPrice
+                        ? formatNumber(item.specialPrice * item.count)
                         : formatNumber(item.price * item.count)}
                     </p>
                   </div>
                 </div>
 
-                <p className="text-[12px] font-[300] max-w-[50%] w-full">{item.detail}</p>
+                <p className="text-[12px] font-[300] max-w-[50%] w-full">
+                  {item.detail}
+                </p>
               </div>
             ))}
           </div>
@@ -131,7 +138,7 @@ const Payment = ({ onPaymentClick }) => {
           <div className="flex justify-between">
             <p className="text-[14px] font-[500]">ราคา</p>
             <p className="text-[14px] font-[400]">
-              {formatNumber(totalPrice)}฿
+              {formatNumber(totalSpecialPrice)} ฿
             </p>
           </div>
           <div className="flex justify-between">
@@ -164,7 +171,7 @@ const Payment = ({ onPaymentClick }) => {
 
         <div className="flex flex-row justify-between w-full">
           <p className="text-lg font-[500]">ยอดทั้งหมด</p>
-          <p className="text-lg font-[500]">{formatNumber(grandTotal)} ฿</p>
+          <p className="text-lg font-[500]">{formatNumber(Tatal)} ฿</p>
         </div>
 
         <div
