@@ -121,9 +121,9 @@ const ListOrders = ({ onOrderToKitchen }) => {
                         {item.name}
                       </p>
 
-                      <div className="w-[19px] h-auto">
+                      <div className="w-[25px] h-auto">
                         <figure
-                          className="w-[19px] h-[19px] cursor-pointer"
+                          className="w-[25px] h-[25px] cursor-pointer"
                           onClick={() => handleRemoveItem(item.id)}
                         >
                           <img

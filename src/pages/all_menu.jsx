@@ -37,7 +37,8 @@ function all_menu() {
 
   return (
     <>
-      <div className={`bg-white flex flex-col overflow-auto p-4 ${
+      <div
+        className={`bg-white flex flex-col overflow-auto p-4 ${
           bestSellerFilter !== "1" ? "gap-4" : "gap-0"
         }`}
       >
@@ -47,6 +48,7 @@ function all_menu() {
             modules={[Navigation]}
             slidesPerView={1}
             spaceBetween={5}
+            loop={true}
             breakpoints={{
               0: { slidesPerView: 4 },
               768: { slidesPerView: 8 },
@@ -84,41 +86,49 @@ function all_menu() {
         </div>
 
         <div className="grid md:grid-cols-3 grid-cols-2 md:gap-6 gap-3 place-items-center ">
-          {filteredFoodDetail.map((item, index) => (
-            <Link
-              to={`/detail/${item.id}`}
-              key={item.id}
-              className="flex flex-col border border-[#D9D9D9] rounded-xl w-full h-auto"
-            >
-              <figure className="w-full md:h-[200px] h-[180px] rounded-t-xl relative">
-                <img
-                  src={item.images}
-                  alt={item.name}
-                  className="w-full h-full rounded-t-xl object-cover"
-                />
-              </figure>
-              <div className="px-2 py-1.5 flex flex-col bg-white rounded-b-xl">
-                <p className="line-clamp-2 text-left md:text-base text-[15px] h-[50px]">
-                  {item.name}
-                </p>
-
-                {item.discount && (
-                  <p className="text-[#8F8F8F] text-[8px] text-right line-through">
-                    {formatNumber(item.price)}
+          {filteredFoodDetail.length === 0 ? (
+            <div className="flex justify-center w-full items-center md:col-span-3 col-span-3">
+              <p className="text-center w-full text-[#8F8F8F] text-sm">
+                ไม่มีรายการอาหาร
+              </p>
+            </div>
+          ) : (
+            filteredFoodDetail.map((item, index) => (
+              <Link
+                to={`/detail/${item.id}`}
+                key={item.id}
+                className="flex flex-col border border-[#D9D9D9] rounded-xl w-full h-auto"
+              >
+                <figure className="w-full md:h-[200px] h-[180px] rounded-t-xl relative">
+                  <img
+                    src={item.images}
+                    alt={item.name}
+                    className="w-full h-full rounded-t-xl object-cover"
+                  />
+                </figure>
+                <div className="px-2 py-1.5 flex flex-col bg-white rounded-b-xl">
+                  <p className="line-clamp-2 text-left md:text-base text-[15px] h-[50px]">
+                    {item.name}
                   </p>
-                )}
 
-                <div className="flex flex-row items-center justify-end gap-0.5">
-                  <p className="text-base font-[600]">
-                    {item.discount
-                      ? formatNumber(item.price - item.discount)
-                      : formatNumber(item.price)}
-                  </p>
-                  <p className="text-[14px]">฿</p>
+                  {item.specialPrice && (
+                    <p className="text-[#8F8F8F] text-[8px] text-right line-through">
+                      {formatNumber(item.price)}
+                    </p>
+                  )}
+
+                  <div className="flex flex-row items-center justify-end gap-0.5">
+                    <p className="text-base font-[600]">
+                      {item.specialPrice
+                        ? formatNumber(item.specialPrice)
+                        : formatNumber(item.price)}
+                    </p>
+                    <p className="text-[14px]">฿</p>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))
+          )}
         </div>
       </div>
     </>
