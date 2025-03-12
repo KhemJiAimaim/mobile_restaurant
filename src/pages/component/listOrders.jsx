@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { foodDetail } from "../component/data";
 import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie"
+import { getAddOrderFood } from "../services/orderfood.service";
 
 const ListOrders = ({ onOrderToKitchen }) => {
   const [count, setCount] = useState(0);
@@ -69,8 +71,21 @@ const ListOrders = ({ onOrderToKitchen }) => {
     if (cartItems == 0) {
       return;
     }
-    onOrderToKitchen();
-    console.log("คำสั่งถูกส่งไปครัว");
+    const token = Cookies.get('token');
+    // const foodAll = localStorage.getItem("cart");
+    const params = {
+      food: cartItems,
+      token: token
+    }
+
+    getAddOrderFood(params).then((res) => {
+      if(res.status) {
+        onOrderToKitchen();
+        console.log("คำสั่งถูกส่งไปครัว");
+      } else {
+        console.log("เกิดข้อผิดพลาดบางอย่าง");
+      }
+    })
   };
 
   return (
