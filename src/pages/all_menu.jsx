@@ -111,7 +111,7 @@ function all_menu() {
                     {item.name}
                   </p>
 
-                  {item.discount && (
+                  {item.specialPrice && (
                     <p className="text-[#8F8F8F] text-[8px] text-right line-through">
                       {formatNumber(item.price)}
                     </p>
@@ -119,8 +119,8 @@ function all_menu() {
 
                   <div className="flex flex-row items-center justify-end gap-0.5">
                     <p className="text-base font-[600]">
-                      {item.discount
-                        ? formatNumber(item.price - item.discount)
+                      {item.specialPrice
+                        ? formatNumber(item.specialPrice)
                         : formatNumber(item.price)}
                     </p>
                     <p className="text-[14px]">฿</p>

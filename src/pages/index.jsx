@@ -16,11 +16,12 @@ function index() {
 
   useEffect(() => {
     const handleResize = () => setIsLargeScreen(window.innerWidth >= 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
-  console.log("จำนวน", cateCount);
   
+  console.log("จำนวน", cateCount);
+
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
       minimumFractionDigits: 2,
@@ -48,22 +49,35 @@ function index() {
 
       <div className="bg-[#FFCC44] w-full mx-auto relative md:p-4 p-2">
         <Swiper
-         ref={swiperRef}
-         modules={[Navigation]}
-         spaceBetween={5}
-         centeredSlides={cateCount < 8} 
-         centeredSlidesBounds={true}
-         breakpoints={{
-           0: {
-             slidesPerView: cateCount < 4 ? 3 : 4, 
-             centeredSlides: cateCount < 4, 
-           },
-           768: {
-            slidesPerView: cateCount <= 2 ? 2 : cateCount <= 3 ? 3 : cateCount <= 4 ? 4 : cateCount <= 6 ? 6 : cateCount <= 8 ? 7 : 8,
-             centeredSlides: cateCount < 8,
-           },
-         }}
-          className={`swiper-container items-center ${cateCount <= 4 && isLargeScreen ? 'w-[500px]' : 'w-full' } `}
+          ref={swiperRef}
+          modules={[Navigation]}
+          spaceBetween={5}
+          centeredSlides={cateCount < 8}
+          centeredSlidesBounds={true}
+          breakpoints={{
+            0: {
+              slidesPerView: cateCount < 4 ? 3 : 4,
+              centeredSlides: cateCount < 4,
+            },
+            768: {
+              slidesPerView:
+                cateCount <= 2
+                  ? 2
+                  : cateCount <= 3
+                  ? 3
+                  : cateCount <= 4
+                  ? 4
+                  : cateCount <= 6
+                  ? 6
+                  : cateCount <= 8
+                  ? 7
+                  : 8,
+              centeredSlides: cateCount < 8,
+            },
+          }}
+          className={`swiper-container items-center ${
+            cateCount <= 4 && isLargeScreen ? "w-[500px]" : "w-full"
+          } `}
         >
           {cate.map((item, index) => (
             <SwiperSlide key={index}>
@@ -114,7 +128,7 @@ function index() {
                 {item.name}
               </p>
 
-              {item.discount && (
+              {item.specialPrice && (
                 <p className="text-[#8F8F8F] text-[8px] text-right line-through">
                   {formatNumber(item.price)}
                 </p>
@@ -122,8 +136,8 @@ function index() {
 
               <div className="flex flex-row items-center justify-end gap-0.5">
                 <p className="text-base font-[600]">
-                  {item.discount
-                    ? formatNumber(item.price - item.discount)
+                  {item.specialPrice
+                    ? formatNumber(item.specialPrice)
                     : formatNumber(item.price)}
                 </p>
                 <p className="text-[14px]">฿</p>
