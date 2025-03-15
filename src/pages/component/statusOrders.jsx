@@ -131,21 +131,16 @@ const StatusOrders = () => {
 
         <div className="flex justify-between w-full mt-4 ">
           <p className="text-[20px] font-[500]">ยอดรวมทั้งหมด</p>
-          <p className="text-[20px] font-[600]">
-            {formatNumber(finalPrice)} ฿
-          </p>
+          <p className="text-[20px] font-[600]">{formatNumber(finalPrice)} ฿</p>
         </div>
 
         <Link
-          to="/payment"
-          className="bg-[#F44D4D] rounded-lg w-[180px] p-1 mx-auto flex justify-center items-center gap-2"
+          to={sortedFoodDetail.length > 0 ? "/payment" : "#"}
+          className={`bg-[#F44D4D] rounded-lg w-[180px] p-1 mx-auto flex justify-center items-center gap-2 ${
+            sortedFoodDetail.length <= 0 ? "pointer-events-none opacity-50" : ""
+          }`}
         >
-          <p
-            className="text-white text-[20px] font-[500]"
-            disabled={sortedFoodDetail.length === 0}
-          >
-            ชำระเงิน
-          </p>
+          <p className="text-white text-[20px] font-[500]">ชำระเงิน</p>
         </Link>
       </div>
     </>

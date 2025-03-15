@@ -60,13 +60,6 @@ const Payment = ({ onPaymentClick }) => {
 
   const Tatal = grandTotal + taxTotal;
 
-  console.log(Tatal);
-
-  //ปัดเป็นจำนวนเต็ม
-  // const tax = Math.round(netTotal * 0.07);
-  // const serviceCharge = Math.round(netTotal * 0.05);
-  // const grandTotal = Math.round(netTotal + tax + serviceCharge);
-
   return (
     <div>
       <div className="w-full h-full md:px-6 px-4 md:py-4 py-1 flex flex-col justify-between md:gap-4 xxx:gap-2 gap-1">

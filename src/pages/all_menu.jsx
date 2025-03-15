@@ -94,8 +94,7 @@ function all_menu() {
             </div>
           ) : (
             filteredFoodDetail.map((item, index) => (
-              <Link
-                to={`/detail/${item.id}`}
+              <c
                 key={item.id}
                 className="flex flex-col border border-[#D9D9D9] rounded-xl w-full h-auto"
               >
@@ -126,7 +125,7 @@ function all_menu() {
                     <p className="text-[14px]">฿</p>
                   </div>
                 </div>
-              </Link>
+              </c>
             ))
           )}
         </div>
