@@ -13,6 +13,7 @@ import CartPages from "./pages/cart";
 import StatusOrders from "./pages/component/statusOrders";
 import Payment from "./pages/payment";
 import { foodDetail } from "./pages/component/data";
+import ReadQrcode from "./pages/ReadQrcode";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -55,6 +56,7 @@ function App() {
               <Route path="/all-menu" element={<MenuPages />} />
               <Route path="/all-menu/:cateId" element={<MenuPages />} />
               <Route path="/detail/:id" element={<DetailMenu />} />
+              <Route path="/readqr/:token" element={<ReadQrcode />} /> 
               <Route
                 path="/cart"
                 element={

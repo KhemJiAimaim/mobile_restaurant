@@ -31,15 +31,15 @@ const StatusOrders = () => {
   const totals = foodDetail.reduce(
     (accumulator, row) => {
       accumulator.price += row.price || 0;
-      accumulator.discount += row.discount || 0;
+      accumulator.specialPrice += row.specialPrice || 0;
       return accumulator;
     },
     {
       price: 0,
-      discount: 0,
+      specialPrice: 0,
     }
   );
-  const finalPrice = totals.price - totals.discount;
+  const finalPrice = totals.price - totals.specialPrice;
 
   return (
     <>
@@ -77,8 +77,8 @@ const StatusOrders = () => {
                         {item.name}
                       </p>
 
-                      <div className="w-[19px] h-auto">
-                        <figure className="w-[19px] h-[19px]">
+                      <div className="w-[25px] h-auto">
+                        <figure className="w-[25px] h-[25px]">
                           <img
                             src="/images/icon/trash.png"
                             alt=""
@@ -91,7 +91,7 @@ const StatusOrders = () => {
                       <div className="flex flex-row justify-between w-full items-center">
                         <p className="text-[20px] font-[400]">฿</p>
                         <p className="text-[20px] font-[500]">
-                          {formatNumber(item.price - item.discount)}
+                          {formatNumber(item.specialPrice)}
                         </p>
                       </div>
                       <div
@@ -131,21 +131,16 @@ const StatusOrders = () => {
 
         <div className="flex justify-between w-full mt-4 ">
           <p className="text-[20px] font-[500]">ยอดรวมทั้งหมด</p>
-          <p className="text-[20px] font-[600]">
-            {formatNumber(finalPrice)} ฿
-          </p>
+          <p className="text-[20px] font-[600]">{formatNumber(finalPrice)} ฿</p>
         </div>
 
         <Link
-          to="/payment"
-          className="bg-[#F44D4D] rounded-lg w-[180px] p-1 mx-auto flex justify-center items-center gap-2"
+          to={sortedFoodDetail.length > 0 ? "/payment" : "#"}
+          className={`bg-[#F44D4D] rounded-lg w-[180px] p-1 mx-auto flex justify-center items-center gap-2 ${
+            sortedFoodDetail.length <= 0 ? "pointer-events-none opacity-50" : ""
+          }`}
         >
-          <p
-            className="text-white text-[20px] font-[500]"
-            disabled={sortedFoodDetail.length === 0}
-          >
-            ชำระเงิน
-          </p>
+          <p className="text-white text-[20px] font-[500]">ชำระเงิน</p>
         </Link>
       </div>
     </>
