@@ -5,8 +5,8 @@ import "dayjs/locale/th";
 
 const Payment = ({ onPaymentClick }) => {
   const [height, setHeight] = useState(window.innerHeight);
-  const [tax, setTaxTotal] = useState(0.07);
-  const [serviceCharge, setServiceCharge] = useState(0.05);
+  const [tax, setTaxTotal] = useState(7);
+  const [serviceCharge, setServiceCharge] = useState(5);
 
   useEffect(() => {
     const updateSize = () => setHeight(window.innerHeight);
@@ -51,9 +51,15 @@ const Payment = ({ onPaymentClick }) => {
   );
 
   const netTotal = totalPrice - totalDiscount;
-  const taxTotal = netTotal * tax;
-  const serviceChargeTotal = netTotal * serviceCharge;
-  const grandTotal = netTotal + tax + serviceCharge;
+  // const taxTotal = netTotal* (tax / 100);
+  // const serviceChargeTotal = netTotal * (serviceCharge / 100);
+  // const grandTotal = netTotal + tax + serviceCharge;
+
+  const serviceChargeTotal = totalPrice * (serviceCharge / 100);
+  const grandTotal = totalPrice + serviceChargeTotal;
+  const taxTotal = grandTotal * (tax / 100);
+  const Tatal = grandTotal + taxTotal;
+
 
   //ปัดเป็นจำนวนเต็ม
   // const tax = Math.round(netTotal * 0.07);
@@ -131,7 +137,7 @@ const Payment = ({ onPaymentClick }) => {
           <div className="flex justify-between">
             <p className="text-[14px] font-[500]">ราคา</p>
             <p className="text-[14px] font-[400]">
-              {formatNumber(totalPrice)}฿
+              {formatNumber(netTotal)}฿
             </p>
           </div>
           <div className="flex justify-between">
@@ -164,7 +170,7 @@ const Payment = ({ onPaymentClick }) => {
 
         <div className="flex flex-row justify-between w-full">
           <p className="text-lg font-[500]">ยอดทั้งหมด</p>
-          <p className="text-lg font-[500]">{formatNumber(grandTotal)} ฿</p>
+          <p className="text-lg font-[500]">{formatNumber(Tatal)} ฿</p>
         </div>
 
         <div
