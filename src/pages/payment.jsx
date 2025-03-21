@@ -52,20 +52,13 @@ const Payment = ({ onPaymentClick }) => {
 
   const totalDiscount = totalPrice - totalSpecialPrice;
 
-  const serviceChargeTotal = totalSpecialPrice * (5 / 100);
+  const serviceChargeTotal = totalSpecialPrice * (serviceCharge / 100);
 
   const grandTotal = totalSpecialPrice + serviceChargeTotal;
 
-  const taxTotal = grandTotal * (7 / 100);
+  const taxTotal = grandTotal * (tax / 100);
 
   const Tatal = grandTotal + taxTotal;
-
-  console.log(Tatal);
-
-  //ปัดเป็นจำนวนเต็ม
-  // const tax = Math.round(netTotal * 0.07);
-  // const serviceCharge = Math.round(netTotal * 0.05);
-  // const grandTotal = Math.round(netTotal + tax + serviceCharge);
 
   return (
     <div>
