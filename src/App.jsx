@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import "./App.css";
 import NavbarComponent from "./components/layouts/Navber/navbar";
@@ -14,10 +14,33 @@ import StatusOrders from "./pages/component/statusOrders";
 import Payment from "./pages/payment";
 import { foodDetail } from "./pages/component/data";
 import ReadQrcode from "./pages/ReadQrcode";
+import { getCategoriesAndFoods } from "./pages/services/cateandfood.service";
 
 function App() {
+  const api_path = "http://localhost:8003";
   const [loading, setLoading] = useState(false);
   const [loadingOrder, setLoadingOrder] = useState(false);
+  const [foods, setFoods] = useState([]);
+  const [cateFoods, setCateFoods] = useState([]);
+  const [refreshData, setRefreshData] = useState(0);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [cateCount, setCateCount] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getCategoriesAndFoods();
+        setFoods(res.foods);
+        setCateFoods(res.categories);
+        setCateCount(res.categories.length);
+        setIsDataLoaded(true);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsDataLoaded(false);
+      }
+    };
+    fetchData();
+  }, [refreshData]);
 
   // Handle general loading state for any button or action
   const handleLoadingClick = () => {
@@ -52,18 +75,59 @@ function App() {
           ) : (
             <Routes>
               <Route path="/" element={<Navigate to="/index" />} />
-              <Route path="/index" element={<IndexPages />} />
-              <Route path="/all-menu" element={<MenuPages />} />
-              <Route path="/all-menu/:cateId" element={<MenuPages />} />
-              <Route path="/detail/:id" element={<DetailMenu />} />
-              <Route path="/readqr/:token" element={<ReadQrcode />} /> 
+              <Route
+                path="/index"
+                element={
+                  <IndexPages
+                    api_path={api_path}
+                    foods={foods}
+                    cateFoods={cateFoods}
+                    cateCount={cateCount}
+                    isDataLoaded={isDataLoaded}
+                  />
+                }
+              />
+              <Route
+                path="/all-menu"
+                element={
+                  <MenuPages
+                    api_path={api_path}
+                    foods={foods}
+                    cateFoods={cateFoods}
+                    isDataLoaded={isDataLoaded}
+                  />
+                }
+              />
+              <Route
+                path="/all-menu/:cateId"
+                element={
+                  <MenuPages
+                    api_path={api_path}
+                    foods={foods}
+                    cateFoods={cateFoods}
+                    isDataLoaded={isDataLoaded}
+                  />
+                }
+              />
+              <Route
+                path="/detail/:id"
+                element={
+                  <DetailMenu
+                    api_path={api_path}
+                    foods={foods}
+                    cateFoods={cateFoods}
+                    isDataLoaded={isDataLoaded}
+                  />
+                }
+              />
+              <Route path="/readqr/:token" element={<ReadQrcode />} />
               <Route
                 path="/cart"
                 element={
                   loadingOrder ? (
                     <SpawnLoadingOrder />
                   ) : (
-                    <CartPages onOrder={handleLoadingOrderClick} />
+                    <CartPages onOrder={handleLoadingOrderClick} api_path={api_path}/>
                   )
                 }
               />

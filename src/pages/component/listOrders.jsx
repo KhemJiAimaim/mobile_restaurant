@@ -1,34 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { foodDetail } from "../component/data";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
 import { getAddOrderFood } from "../services/orderfood.service";
 
-const ListOrders = ({ onOrderToKitchen }) => {
-  const [count, setCount] = useState(0);
+const ListOrders = ({ onOrderToKitchen, api_path }) => {
+  // const [count, setCount] = useState(0);
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [height, setHeight] = useState(window.innerHeight);
 
+  console.log("cartItems", cartItems);
 
- useEffect(() => {
+  useEffect(() => {
     const updateSize = () => setHeight(window.innerHeight);
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
-  const reducedHeight = window.innerWidth >= 768
-  ? height - 250
-  : window.innerWidth >= 360
-  ? height - 240
-  : height - 200;
+  const reducedHeight =
+    window.innerWidth >= 768
+      ? height - 250
+      : window.innerWidth >= 360
+      ? height - 240
+      : height - 200;
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-
+    console.log("storedCart", storedCart);
     //รายการที่ซ้ำกัน
     const mergedCart = storedCart.reduce((acc, item) => {
-      const existingItem = acc.find((i) => i.id === item.id);
+      const existingItem = acc.find(
+        (i) => i.id === item.id && i.note === item.note
+      );
+      console.log("existingItem", existingItem);
       if (existingItem) {
         existingItem.count += item.count;
       } else {
@@ -36,11 +41,16 @@ const ListOrders = ({ onOrderToKitchen }) => {
       }
       return acc;
     }, []);
+    console.log("mergedCart", mergedCart);
 
     setCartItems(mergedCart.reverse());
   }, []);
 
-  const formatNumber = (num) => Number(num).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const formatNumber = (num) =>
+    Number(num).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
   //ลดจำนวนอาหาร
   const handleDecrement = (id) => {
@@ -71,27 +81,35 @@ const ListOrders = ({ onOrderToKitchen }) => {
     if (cartItems == 0) {
       return;
     }
-    const token = Cookies.get('token');
+    const token = Cookies.get("token");
     // const foodAll = localStorage.getItem("cart");
+
     const params = {
       food: cartItems,
-      token: token
-    }
+      token: token,
+    };
+
+    console.log("cartItems", cartItems);
+    console.log("token", token);
+    console.log("params", params);
 
     getAddOrderFood(params).then((res) => {
-      if(res.status) {
+      if (res.status) {
         onOrderToKitchen();
         console.log("คำสั่งถูกส่งไปครัว");
       } else {
         console.log("เกิดข้อผิดพลาดบางอย่าง");
       }
-    })
+    });
   };
 
   return (
     <>
       <div className="h-full flex flex-col justify-between gap-3">
-        <div style={{ height: `calc(${reducedHeight}px)` }} className="overflow-y-auto">
+        <div
+          style={{ height: `calc(${reducedHeight}px)` }}
+          className="overflow-y-auto"
+        >
           <div className="grid md:grid-cols-2 grid-cols-1 gap-3">
             {cartItems.length === 0 ? (
               <div className="flex justify-center w-full items-center col-span-2">
@@ -108,7 +126,7 @@ const ListOrders = ({ onOrderToKitchen }) => {
                   <div className="max-w-full w-[20%]">
                     <figure className="w-[80px] h-[80px] rounded-xl">
                       <img
-                        src={item.image}
+                        src={api_path + item.image}
                         alt={item.name}
                         className="w-full h-full object-cover rounded-xl"
                       />
@@ -139,7 +157,10 @@ const ListOrders = ({ onOrderToKitchen }) => {
                       <div className="flex flex-row justify-between w-full items-center">
                         <p className="text-[20px] font-[400]">฿</p>
                         <p className="text-[20px] font-[500]">
-                          {formatNumber(item.price * item.count)}
+                          {item.special_price !== 0 &&
+                          item.special_price !== null
+                            ? item.special_price * item.count
+                            : item.original_price * item.count}
                         </p>
                       </div>
                       <div className="w-full flex flex-row justify-end items-center gap-4">

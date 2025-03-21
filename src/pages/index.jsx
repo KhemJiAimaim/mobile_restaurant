@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import SwiperMenu from "./component/swiper";
-
 import { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -9,9 +8,8 @@ import "swiper/css/navigation";
 import { Link } from "react-router-dom";
 import { cate, foodDetail } from "./component/data";
 
-function index() {
+function index({ api_path, foods, cateFoods, cateCount, isDataLoaded }) {
   const swiperRef = useRef(null);
-  const [cateCount, setCateCount] = useState(cate.length);
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768);
 
   useEffect(() => {
@@ -19,8 +17,6 @@ function index() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  
-  console.log("จำนวน", cateCount);
 
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
@@ -44,65 +40,70 @@ function index() {
           </Link>
         </div>
 
-        <SwiperMenu />
+        <SwiperMenu
+          foods={foods}
+          api_path={api_path}
+          isDataLoaded={isDataLoaded}
+        />
       </div>
-
-      <div className="bg-[#FFCC44] w-full mx-auto relative md:p-4 p-2">
-        <Swiper
-          ref={swiperRef}
-          modules={[Navigation]}
-          spaceBetween={5}
-          centeredSlides={cateCount < 8}
-          centeredSlidesBounds={true}
-          breakpoints={{
-            0: {
-              slidesPerView: cateCount < 4 ? 3 : 4,
-              centeredSlides: cateCount < 4,
-            },
-            768: {
-              slidesPerView:
-                cateCount <= 2
-                  ? 2
-                  : cateCount <= 3
-                  ? 3
-                  : cateCount <= 4
-                  ? 4
-                  : cateCount <= 6
-                  ? 6
-                  : cateCount <= 8
-                  ? 7
-                  : 8,
-              centeredSlides: cateCount < 8,
-            },
-          }}
-          className={`swiper-container items-center ${
-            cateCount <= 4 && isLargeScreen ? "w-[500px]" : "w-full"
-          } `}
-        >
-          {cate.map((item, index) => (
-            <SwiperSlide key={index}>
-              <Link
-                to={`/all-menu/${item.id}`}
-                className="w-full mx-auto flex flex-col gap-2 justify-center items-center flex-shrink-0"
-              >
-                <figure className="w-[52px] h-[53px] rounded-md">
-                  <img
-                    src={item.images}
-                    alt={item.name}
-                    className="w-full h-full"
-                  />
-                </figure>
-                <p className="font-[500] md:text-base text-sm text-black">
-                  {item.name}
-                </p>
-              </Link>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+      {isDataLoaded && (
+        <div className="bg-[#FFCC44] w-full mx-auto relative md:p-4 p-2">
+          <Swiper
+            ref={swiperRef}
+            modules={[Navigation]}
+            spaceBetween={5}
+            centeredSlides={cateCount < 8}
+            centeredSlidesBounds={true}
+            breakpoints={{
+              0: {
+                slidesPerView: cateCount < 4 ? 3 : 4,
+                centeredSlides: cateCount < 4,
+              },
+              768: {
+                slidesPerView:
+                  cateCount <= 2
+                    ? 2
+                    : cateCount <= 3
+                    ? 3
+                    : cateCount <= 4
+                    ? 4
+                    : cateCount <= 6
+                    ? 6
+                    : cateCount <= 8
+                    ? 7
+                    : 8,
+                centeredSlides: cateCount < 8,
+              },
+            }}
+            className={`swiper-container items-center ${
+              cateCount <= 4 && isLargeScreen ? "w-[500px]" : "w-full"
+            } `}
+          >
+            {cateFoods.map((item, index) => (
+              <SwiperSlide key={index}>
+                <Link
+                  to={`/all-menu/${item.id}`}
+                  className="w-full mx-auto flex flex-col gap-2 justify-center items-center flex-shrink-0"
+                >
+                  <figure className="w-[52px] h-[53px] rounded-md">
+                    <img
+                      src={api_path + item.thumbnail}
+                      alt={item.title}
+                      className="w-full h-full"
+                    />
+                  </figure>
+                  <p className="font-[500] md:text-base text-sm text-black">
+                    {item.title}
+                  </p>
+                </Link>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      )}
 
       <div className="grid md:grid-cols-4 grid-cols-3 md:gap-6 gap-2 p-4 place-items-center ">
-        {foodDetail.map((item, index) => (
+        {foods.map((item, index) => (
           <Link
             to={`/detail/${item.id}`}
             key={index}
@@ -110,7 +111,7 @@ function index() {
           >
             <figure className="w-full md:h-[150px] h-[122px] rounded-t-xl relative">
               <img
-                src={item.images}
+                src={api_path + item.thumbnail_link}
                 alt=""
                 className=" w-full h-full rounded-t-xl object-cover"
               />
@@ -128,7 +129,7 @@ function index() {
                 {item.name}
               </p>
 
-              {item.specialPrice && (
+              {item.special_price !== null && item.special_price !== 0 && (
                 <p className="text-[#8F8F8F] text-[8px] text-right line-through">
                   {formatNumber(item.price)}
                 </p>
@@ -136,8 +137,8 @@ function index() {
 
               <div className="flex flex-row items-center justify-end gap-0.5">
                 <p className="text-base font-[600]">
-                  {item.specialPrice
-                    ? formatNumber(item.specialPrice)
+                  {item.special_price !== null && item.special_price !== 0
+                    ? formatNumber(item.special_price)
                     : formatNumber(item.price)}
                 </p>
                 <p className="text-[14px]">฿</p>
