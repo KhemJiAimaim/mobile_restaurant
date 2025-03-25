@@ -35,15 +35,20 @@ const DetailPage = ({ api_path, foods, cateFoods, isDataLoaded }) => {
     const item = {
       id: menu.id,
       name: menu.name,
-      discount: menu.price - menu.special_price,
+      price:
+        menu.special_price !== 0 && menu.special_price !== null
+          ? menu.special_price
+          : menu.price,
+      discount:
+        menu.special_price !== 0 && menu.special_price !== null
+          ? menu.price - menu.special_price
+          : 0,
       original_price: menu.price,
       special_price: menu.special_price,
       count,
       note: text,
       image: menu.thumbnail_link,
     };
-
-    console.log("item", item);
 
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
     const updatedCart = [...existingCart, item];

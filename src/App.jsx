@@ -65,7 +65,7 @@ function App() {
       <div className="max-w-[768px] w-full mx-auto flex flex-col h-screen">
         {/* Navbar */}
         <div className="fixed -top-0.5 w-full z-99">
-          <NavbarComponent />
+          <NavbarComponent api_path={api_path} foods={foods} />
         </div>
 
         {/* Contents */}
@@ -127,7 +127,10 @@ function App() {
                   loadingOrder ? (
                     <SpawnLoadingOrder />
                   ) : (
-                    <CartPages onOrder={handleLoadingOrderClick} api_path={api_path}/>
+                    <CartPages
+                      onOrder={handleLoadingOrderClick}
+                      api_path={api_path}
+                    />
                   )
                 }
               />

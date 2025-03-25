@@ -3,27 +3,27 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
 import { foodDetail } from "../../../pages/component/data";
 
-function NavbarComponent() {
+function NavbarComponent({ api_path, foods }) {
   const [cartCount, setCartCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredFood, setFilteredFood] = useState(foodDetail);
+  const [filteredFood, setFilteredFood] = useState(foods);
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
 
     if (term) {
-      const filtered = foodDetail.filter((item) =>
+      const filtered = foods.filter((item) =>
         item.name.toLowerCase().includes(term.toLowerCase())
       );
-      setFilteredFood(filtered); 
+      setFilteredFood(filtered);
     } else {
       setFilteredFood(foodDetail);
     }
   };
 
   const handleSelectFood = () => {
-    setSearchTerm(""); 
+    setSearchTerm("");
   };
 
   const updateCartCount = () => {
@@ -31,9 +31,11 @@ function NavbarComponent() {
     const cartData = storedCart ? JSON.parse(storedCart) : [];
 
     // ใช้ Set เพื่อนับเฉพาะสินค้าที่ไม่ซ้ำกัน
-    const uniqueItems = new Set(cartData.map((item) => item.id));
+    // const uniqueItems = new Set(cartData.map((item) => item.id));
+    // setCartCount(uniqueItems.size);
 
-    setCartCount(uniqueItems.size);
+    const tatalCount = cartData.reduce((sum, item) => sum + item.count, 0);
+    setCartCount(tatalCount);
   };
 
   useEffect(() => {
@@ -55,8 +57,6 @@ function NavbarComponent() {
       clearInterval(interval);
     };
   }, []);
-
-  // console.log(cartCount);
 
   return (
     <>
@@ -103,7 +103,6 @@ function NavbarComponent() {
           </div>
         </div>
 
-        
         {searchTerm && (
           <ul className="absolute w-full bg-slate-50 border border-[#D9D9D9] max-h-[200px] overflow-auto z-50 left-0 rounded-b-md shadow-md">
             {filteredFood.length > 0 ? (
@@ -116,7 +115,7 @@ function NavbarComponent() {
                 >
                   <figure className="w-12 h-12 rounded-sm shadow-sm">
                     <img
-                      src={food.images}
+                      src={api_path + food.thumbnail_link}
                       alt=""
                       className="w-full h-full rounded-sm object-cover"
                     />
@@ -128,7 +127,6 @@ function NavbarComponent() {
               <li className="px-4 py-2 text-gray-500">ไม่พบเมนู</li>
             )}
           </ul>
-
         )}
       </div>
     </>
