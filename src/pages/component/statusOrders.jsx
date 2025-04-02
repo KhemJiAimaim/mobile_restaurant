@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { foodDetail } from "../component/data";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
-const StatusOrders = () => {
+const StatusOrders = ({ api_path, orderAll }) => {
   const [height, setHeight] = useState(window.innerHeight);
 
   useEffect(() => {
@@ -17,29 +18,42 @@ const StatusOrders = () => {
       : window.innerWidth >= 360
       ? height - 290
       : height - 200;
+
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
-  const statusOrder = ["อยู่ระหว่างปรุง", "พร้อมเสริฟ", "รายการครบ", "ยกเลิก"];
 
-  const sortedFoodDetail = foodDetail.sort((a, b) => {
-    return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
-  });
+  const statusOrder = {
+    1: { text: "รับออเดอร์", color: "bg-[#2B8EF8]" },
+    2: { text: "อยู่ระหว่างปรุง", color: "bg-[#FFD000]" },
+    3: { text: "รอเสิร์ฟ", color: "bg-[#F5AB3A]" },
+    4: { text: "เสิร์ฟเรียบร้อย", color: "bg-[#10D024]" },
+    5: { text: "ยกเลิก", color: "bg-[#F92727]" },
+    6: { text: "สินค้าหมด", color: "bg-[#8F8F8F]" },
+  };
 
-  const totals = foodDetail.reduce(
-    (accumulator, row) => {
-      accumulator.price += row.price || 0;
-      accumulator.specialPrice += row.specialPrice || 0;
-      return accumulator;
-    },
-    {
-      price: 0,
-      specialPrice: 0,
-    }
+  // const sortedFoodDetail = orderAll.sort((a, b) => {
+  //   return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+  // });
+
+  const sortedFoodDetail = (orderAll?.orderList || []).sort(
+    (a, b) => Number(a.status) - Number(b.status)
   );
-  const finalPrice = totals.price - totals.specialPrice;
+
+  // const totals = foodDetail.reduce(
+  //   (accumulator, row) => {
+  //     accumulator.price += row.price || 0;
+  //     accumulator.specialPrice += row.specialPrice || 0;
+  //     return accumulator;
+  //   },
+  //   {
+  //     price: 0,
+  //     specialPrice: 0,
+  //   }
+  // );
+  // const finalPrice = totals.price - totals.specialPrice;
 
   return (
     <>
@@ -64,7 +78,7 @@ const StatusOrders = () => {
                   <div className="max-w-full w-[20%]">
                     <figure className="w-[80px] h-[80px] rounded-xl">
                       <img
-                        src={item.images}
+                        src={api_path + item.food.thumbnail_link}
                         alt=""
                         className="w-full h-full object-cover rounded-xl"
                       />
@@ -74,10 +88,10 @@ const StatusOrders = () => {
                   <div className="w-full flex flex-col justify-start items-center gap-2 max-md:h-auto">
                     <div className="flex flex-row justify-between items-start w-full gap-2">
                       <p className="text-base font-[500] w-full md:h-[50px]">
-                        {item.name}
+                        {item.food.name}
                       </p>
 
-                      <div className="w-[25px] h-auto">
+                      {/* <div className="w-[25px] h-auto">
                         <figure className="w-[25px] h-[25px]">
                           <img
                             src="/images/icon/trash.png"
@@ -85,41 +99,36 @@ const StatusOrders = () => {
                             className="w-full h-full object-cover rounded-xl"
                           />
                         </figure>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="flex flex-row justify-between w-full max-xxx:gap-6 gap-12 border-b border-[#8F8F8F] border-dashed pb-1 items-center">
                       <div className="flex flex-row justify-between w-full items-center">
                         <p className="text-[20px] font-[400]">฿</p>
                         <p className="text-[20px] font-[500]">
-                          {formatNumber(item.specialPrice)}
+                          {item.food.special_price !== 0 &&
+                          item.food.special_price !== null
+                            ? formatNumber(
+                                item.food.special_price * item.amount
+                              )
+                            : formatNumber(item.food.price * item.amount)}
                         </p>
                       </div>
                       <div
                         className={`max-w-[100px] w-full flex justify-end rounded-sm p-1 items-center 
-                    ${
-                      item.status === "พร้อมเสริฟ"
-                        ? "bg-[#F92727]"
-                        : item.status === "รายการครบ"
-                        ? "bg-[#10D024]"
-                        : item.status === "อยู่ระหว่างปรุง"
-                        ? "bg-[#F5AB3A]"
-                        : item.status === "ยกเลิก"
-                        ? "bg-[#8F8F8F]"
-                        : " "
-                    }
+                    ${statusOrder[item.status]?.color}
                   `}
                       >
                         <p className="text-sm text-white text-center w-full">
-                          {item.status}
+                          {statusOrder[item.status]?.text}
                         </p>
                       </div>
                     </div>
-                    {item.detail && (
+                    {item.note && (
                       <div className="flex flex-col justify-start items-start w-full gap-0.5 ">
                         <p className="text-[10px] font-[500] text-[#8F8F8F]">
                           หมายเหตุ
                         </p>
-                        <p className="text-[12px] font-[300]">{item.detail}</p>
+                        <p className="text-[12px] font-[300]">{item.note}</p>
                       </div>
                     )}
                   </div>
@@ -131,7 +140,9 @@ const StatusOrders = () => {
 
         <div className="flex justify-between w-full mt-4 ">
           <p className="text-[20px] font-[500]">ยอดรวมทั้งหมด</p>
-          <p className="text-[20px] font-[600]">{formatNumber(finalPrice)} ฿</p>
+          <p className="text-[20px] font-[600]">
+            {formatNumber(orderAll.price)} ฿
+          </p>
         </div>
 
         <Link

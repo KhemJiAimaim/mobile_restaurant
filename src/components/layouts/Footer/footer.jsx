@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 
-const FooterComponent = ({ onEmployeeClick }) => {
+const FooterComponent = ({ onEmployeeClick, nameTable }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [openLang, setOpenLang] = useState(false);
   const langRef = useRef(null);
@@ -70,7 +70,7 @@ const FooterComponent = ({ onEmployeeClick }) => {
                 className="w-full h-full"
               />
             </figure>
-            <p className="text-xl font-[600]">: โต๊ะ 01</p>
+            <p className="text-xl font-[600]">: {nameTable}</p>
           </div>
 
           {/* 3 */}

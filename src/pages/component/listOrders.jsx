@@ -10,8 +10,6 @@ const ListOrders = ({ onOrderToKitchen, api_path }) => {
   const [cartItems, setCartItems] = useState([]);
   const [height, setHeight] = useState(window.innerHeight);
 
-  console.log("cartItems", cartItems);
-
   useEffect(() => {
     const updateSize = () => setHeight(window.innerHeight);
     window.addEventListener("resize", updateSize);
@@ -159,8 +157,8 @@ const ListOrders = ({ onOrderToKitchen, api_path }) => {
                         <p className="text-[20px] font-[500]">
                           {item.special_price !== 0 &&
                           item.special_price !== null
-                            ? item.special_price * item.count
-                            : item.original_price * item.count}
+                            ? formatNumber(item.special_price * item.count)
+                            : formatNumber(item.original_price * item.count)}
                         </p>
                       </div>
                       <div className="w-full flex flex-row justify-end items-center gap-4">

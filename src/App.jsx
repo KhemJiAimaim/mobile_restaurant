@@ -15,6 +15,8 @@ import Payment from "./pages/payment";
 import { foodDetail } from "./pages/component/data";
 import ReadQrcode from "./pages/ReadQrcode";
 import { getCategoriesAndFoods } from "./pages/services/cateandfood.service";
+import { getStatusFoodOrders } from "./pages/services/orderfood.service";
+import Cookies from "js-cookie";
 
 function App() {
   const api_path = "http://localhost:8003";
@@ -25,14 +27,50 @@ function App() {
   const [refreshData, setRefreshData] = useState(0);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [cateCount, setCateCount] = useState(0);
+  const [nameTable, setNameTable] = useState(null);
+  const [orderAll, setOrderAll] = useState([]);
+  const [taxValue, setTaxValue] = useState(0);
+  const [serviceChargeValue, setServiceChargeValue] = useState(0);
+
+  console.log("nameTable", nameTable);
+  console.log("orderAll", orderAll);
+  console.log("taxValue", taxValue);
+  console.log("serviceChargeValue", serviceChargeValue);
 
   useEffect(() => {
     const fetchData = async () => {
+      const decoded = Cookies.get("decoded");
+      const tableInfo = JSON.parse(decoded);
+      console.log("tableInfo", tableInfo.table_id);
       try {
-        const res = await getCategoriesAndFoods();
-        setFoods(res.foods);
-        setCateFoods(res.categories);
-        setCateCount(res.categories.length);
+        const resCateFoodAndFood = await getCategoriesAndFoods();
+        setFoods(resCateFoodAndFood.foods);
+        setCateFoods(resCateFoodAndFood.categories);
+        setCateCount(resCateFoodAndFood.categories.length);
+
+        const resOrderAndTax = await getStatusFoodOrders();
+        console.log("resOrderAndTax", resOrderAndTax);
+
+        const filteredOrderData = resOrderAndTax.orderAll.find(
+          (order) => order.table_id === tableInfo.table_id
+        );
+
+        console.log("filteredOrderData", filteredOrderData);
+
+        const filteredTax = resOrderAndTax.taxAndService.find(
+          (info) => info.info_param === "tax_rate"
+        );
+        console.log("filteredTax", filteredTax);
+        const filteredServiceCharge = resOrderAndTax.taxAndService.find(
+          (info) => info.info_param === "service_rate"
+        );
+        console.log("filteredServiceCharge", filteredServiceCharge);
+
+        setNameTable(filteredOrderData.table.title);
+        setOrderAll(filteredOrderData);
+        setTaxValue(Number(filteredTax.info_value) || 0);
+        setServiceChargeValue(Number(filteredServiceCharge.info_value) || 0);
+
         setIsDataLoaded(true);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -130,6 +168,7 @@ function App() {
                     <CartPages
                       onOrder={handleLoadingOrderClick}
                       api_path={api_path}
+                      orderAll={orderAll}
                     />
                   )
                 }
@@ -145,7 +184,10 @@ function App() {
 
         {/* Footer */}
         <div className="fixed bottom-0 w-full bg-white shadow-md z-10 transition-all duration-300 ease-in-out">
-          <FooterComponent onEmployeeClick={handleLoadingClick} />
+          <FooterComponent
+            onEmployeeClick={handleLoadingClick}
+            nameTable={nameTable}
+          />
         </div>
       </div>
     </BrowserRouter>
