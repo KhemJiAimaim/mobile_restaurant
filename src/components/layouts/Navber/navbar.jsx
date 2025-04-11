@@ -3,7 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
 import { foodDetail } from "../../../pages/component/data";
 
-function NavbarComponent({ api_path, foods }) {
+function NavbarComponent({ api_path, foods, logo }) {
   const [cartCount, setCartCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredFood, setFilteredFood] = useState(foods);
@@ -60,12 +60,19 @@ function NavbarComponent({ api_path, foods }) {
 
   return (
     <>
-      <div className="bg-[#313131] md:px-6 px-4 py-4  max-w-[768px] shadow-sm relative">
-        <div className="flex flex-row gap-1 justify-between items-center  w-full mx-auto">
+      <div className="bg-[#313131] md:px-6 px-4 py-4 max-w-[768px] max-h-[70px] shadow-sm relative flex justify-center items-center">
+        <div className="flex flex-row gap-1 justify-between items-center w-full mx-auto">
           <div className="flex-shrink-0 max-w-[75px] w-full">
             <Link to="/" className="xxs:w-[75px] w-[60px] h-auto">
-              <p className="text-white font-[600] text-[25px]">LOGO</p>
+              {logo ? (
+                <img
+                  src={api_path + logo}
+                  alt=""
+                  className="w-full h-full object-cover rounded-xl"
+                />
+              ) : null}
             </Link>
+            {/* <p className="text-white font-[600] text-[25px]">LOGO</p> */}
           </div>
 
           <div className="flex flex-row justify-end items-center w-full">

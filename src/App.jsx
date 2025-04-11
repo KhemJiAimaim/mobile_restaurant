@@ -17,6 +17,7 @@ import ReadQrcode from "./pages/ReadQrcode";
 import { getCategoriesAndFoods } from "./pages/services/cateandfood.service";
 import { getStatusFoodOrders } from "./pages/services/orderfood.service";
 import Cookies from "js-cookie";
+import { getWebInfoData } from "./pages/services/webinfo.service";
 
 function App() {
   const api_path = "http://localhost:8003";
@@ -29,47 +30,48 @@ function App() {
   const [cateCount, setCateCount] = useState(0);
   const [nameTable, setNameTable] = useState(null);
   const [orderAll, setOrderAll] = useState([]);
-  const [taxValue, setTaxValue] = useState(0);
-  const [serviceChargeValue, setServiceChargeValue] = useState(0);
+  const [generalWebInfo, setGeneralWebInfo] = useState([]);
+  const [contactWebInfo, setContactWebInfo] = useState([]);
+  const [taxAndService, setTaxAndService] = useState([]);
+  const [catePage, setCatePage] = useState(0);
 
-  console.log("nameTable", nameTable);
-  console.log("orderAll", orderAll);
-  console.log("taxValue", taxValue);
-  console.log("serviceChargeValue", serviceChargeValue);
+  console.log("catePage",catePage)
 
   useEffect(() => {
     const fetchData = async () => {
       const decoded = Cookies.get("decoded");
       const tableInfo = JSON.parse(decoded);
-      console.log("tableInfo", tableInfo.table_id);
       try {
         const resCateFoodAndFood = await getCategoriesAndFoods();
         setFoods(resCateFoodAndFood.foods);
         setCateFoods(resCateFoodAndFood.categories);
         setCateCount(resCateFoodAndFood.categories.length);
+        setCatePage(resCateFoodAndFood.categories[0].id);
 
         const resOrderAndTax = await getStatusFoodOrders();
-        console.log("resOrderAndTax", resOrderAndTax);
 
         const filteredOrderData = resOrderAndTax.orderAll.find(
           (order) => order.table_id === tableInfo.table_id
         );
 
-        console.log("filteredOrderData", filteredOrderData);
+        const webInfoAll = await getWebInfoData();
+        setGeneralWebInfo(webInfoAll.generalWebInfo);
+        setContactWebInfo(webInfoAll.contactWebInfo);
+        setTaxAndService(webInfoAll.taxAndService);
 
-        const filteredTax = resOrderAndTax.taxAndService.find(
-          (info) => info.info_param === "tax_rate"
-        );
-        console.log("filteredTax", filteredTax);
-        const filteredServiceCharge = resOrderAndTax.taxAndService.find(
-          (info) => info.info_param === "service_rate"
-        );
-        console.log("filteredServiceCharge", filteredServiceCharge);
+        // console.log("filteredOrderData", filteredOrderData);
+
+        // const filteredTax = resOrderAndTax.taxAndService.find(
+        //   (info) => info.info_param === "tax_rate"
+        // );
+        // console.log("filteredTax", filteredTax);
+        // const filteredServiceCharge = resOrderAndTax.taxAndService.find(
+        //   (info) => info.info_param === "service_rate"
+        // );
+        // console.log("filteredServiceCharge", filteredServiceCharge);
 
         setNameTable(filteredOrderData.table.title);
         setOrderAll(filteredOrderData);
-        setTaxValue(Number(filteredTax.info_value) || 0);
-        setServiceChargeValue(Number(filteredServiceCharge.info_value) || 0);
 
         setIsDataLoaded(true);
       } catch (error) {
@@ -79,6 +81,21 @@ function App() {
     };
     fetchData();
   }, [refreshData]);
+
+  const generalInfoMap = {};
+  generalWebInfo.forEach((item) => {
+    generalInfoMap[item.info_param] = { ...item };
+  });
+
+  const contactInfoMap = {};
+  contactWebInfo.forEach((item) => {
+    contactInfoMap[item.info_param] = { ...item };
+  });
+
+  const taxAndServiceMap = {};
+  taxAndService.forEach((item) => {
+    taxAndServiceMap[item.info_param] = { ...item };
+  });
 
   // Handle general loading state for any button or action
   const handleLoadingClick = () => {
@@ -103,7 +120,11 @@ function App() {
       <div className="max-w-[768px] w-full mx-auto flex flex-col h-screen">
         {/* Navbar */}
         <div className="fixed -top-0.5 w-full z-99">
-          <NavbarComponent api_path={api_path} foods={foods} />
+          <NavbarComponent
+            api_path={api_path}
+            foods={foods}
+            logo={generalInfoMap.web_logo?.info_link}
+          />
         </div>
 
         {/* Contents */}
@@ -122,6 +143,7 @@ function App() {
                     cateFoods={cateFoods}
                     cateCount={cateCount}
                     isDataLoaded={isDataLoaded}
+                    setCatePage={setCatePage}
                   />
                 }
               />
@@ -133,6 +155,7 @@ function App() {
                     foods={foods}
                     cateFoods={cateFoods}
                     isDataLoaded={isDataLoaded}
+                    setCatePage={setCatePage}
                   />
                 }
               />
@@ -144,6 +167,7 @@ function App() {
                     foods={foods}
                     cateFoods={cateFoods}
                     isDataLoaded={isDataLoaded}
+                    setCatePage={setCatePage}
                   />
                 }
               />
@@ -176,7 +200,16 @@ function App() {
 
               <Route
                 path="/payment"
-                element={<Payment onPaymentClick={handleLoadingClick} />}
+                element={
+                  <Payment
+                    api_path={api_path}
+                    onPaymentClick={handleLoadingClick}
+                    orderAll={orderAll}
+                    generalInfoMap={generalInfoMap}
+                    contactInfoMap={contactInfoMap}
+                    taxAndServiceMap={taxAndServiceMap}
+                  />
+                }
               />
             </Routes>
           )}
@@ -187,6 +220,7 @@ function App() {
           <FooterComponent
             onEmployeeClick={handleLoadingClick}
             nameTable={nameTable}
+            catePage={catePage}
           />
         </div>
       </div>

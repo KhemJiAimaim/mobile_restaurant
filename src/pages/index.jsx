@@ -8,7 +8,14 @@ import "swiper/css/navigation";
 import { Link } from "react-router-dom";
 import { cate, foodDetail } from "./component/data";
 
-function index({ api_path, foods, cateFoods, cateCount, isDataLoaded }) {
+function index({
+  api_path,
+  foods,
+  cateFoods,
+  cateCount,
+  isDataLoaded,
+  setCatePage,
+}) {
   const swiperRef = useRef(null);
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768);
 
@@ -84,6 +91,7 @@ function index({ api_path, foods, cateFoods, cateCount, isDataLoaded }) {
                 <Link
                   to={`/all-menu/${item.id}`}
                   className="w-full mx-auto flex flex-col gap-2 justify-center items-center flex-shrink-0"
+                  onClick={() => setCatePage(item.id)}
                 >
                   <figure className="w-[52px] h-[53px] rounded-md">
                     <img

@@ -8,7 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Link, useParams } from "react-router-dom";
 
-function all_menu({ api_path, foods, cateFoods, isDataLoaded }) {
+function all_menu({ api_path, foods, cateFoods, isDataLoaded, setCatePage }) {
   const swiperRef = useRef(null);
   const { cateId } = useParams();
 
@@ -18,7 +18,9 @@ function all_menu({ api_path, foods, cateFoods, isDataLoaded }) {
 
   useEffect(() => {
     if (cateId) {
-      setSelectedCate(Number(cateId));
+      const id = Number(cateId);
+      setSelectedCate(id);
+      setCatePage(id);
     }
   }, [cateId]);
 
