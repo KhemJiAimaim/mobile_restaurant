@@ -41,8 +41,6 @@ const Payment = ({
       ? height - 300
       : height - 400;
 
-  console.log("reducedHeight", reducedHeight);
-
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {
       minimumFractionDigits: 2,
@@ -52,7 +50,7 @@ const Payment = ({
   // คำนวณราคา
   // ราคาเต็ม
   const priceAll = (orderAll.orderList || []).reduce(
-    (sum, item) => sum + item.food.price * item.amount,
+    (sum, item) => sum + (item.food.price || 0) * item.amount,
     0
   );
 
@@ -79,7 +77,7 @@ const Payment = ({
     100;
 
   // ราคาสุทธิ
-  const totalPrice = formatNumber(netSubtotal + serviceChargePrice + taxPrice);
+  const totalPrice = netSubtotal + serviceChargePrice + taxPrice;
 
   return (
     <div>
@@ -128,12 +126,12 @@ const Payment = ({
 
           <div
             style={{ height: `calc(${reducedHeight}px)` }}
-            className="overflow-auto w-full flex flex-col gap-1"
+            className="overflow-auto w-full flex flex-col gap-1 pt-4.5"
           >
             {(orderAll?.orderList || []).map((item, index) => (
               <div
                 key={index}
-                className="flex flex-col justify-end items-start min-h-[40.5px]"
+                className="flex flex-col justify-end items-start min-h-[41px]"
               >
                 <div className="flex flex-row justify-between w-full items-end gap-4">
                   <p className="text-[15px] font-[500] line-clamp-1 w-[50%]">
@@ -214,7 +212,9 @@ const Payment = ({
 
         <div className="flex flex-row justify-between w-full">
           <p className="text-lg font-[500]">ยอดทั้งหมด</p>
-          <p className="text-lg font-[500]">{formatNumber(totalPrice)} ฿</p>
+          {totalPrice !== 0 && totalPrice !== null && (
+            <p className="text-lg font-[500]">{formatNumber(totalPrice)} ฿</p>
+          )}
         </div>
 
         <div

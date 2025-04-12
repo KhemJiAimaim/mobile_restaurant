@@ -35,8 +35,6 @@ function App() {
   const [taxAndService, setTaxAndService] = useState([]);
   const [catePage, setCatePage] = useState(0);
 
-  console.log("catePage",catePage)
-
   useEffect(() => {
     const fetchData = async () => {
       const decoded = Cookies.get("decoded");
@@ -48,9 +46,9 @@ function App() {
         setCateCount(resCateFoodAndFood.categories.length);
         setCatePage(resCateFoodAndFood.categories[0].id);
 
-        const resOrderAndTax = await getStatusFoodOrders();
+        const resOrder = await getStatusFoodOrders();
 
-        const filteredOrderData = resOrderAndTax.orderAll.find(
+        const filteredOrderData = resOrder.orderAll.find(
           (order) => order.table_id === tableInfo.table_id
         );
 
@@ -58,18 +56,6 @@ function App() {
         setGeneralWebInfo(webInfoAll.generalWebInfo);
         setContactWebInfo(webInfoAll.contactWebInfo);
         setTaxAndService(webInfoAll.taxAndService);
-
-        // console.log("filteredOrderData", filteredOrderData);
-
-        // const filteredTax = resOrderAndTax.taxAndService.find(
-        //   (info) => info.info_param === "tax_rate"
-        // );
-        // console.log("filteredTax", filteredTax);
-        // const filteredServiceCharge = resOrderAndTax.taxAndService.find(
-        //   (info) => info.info_param === "service_rate"
-        // );
-        // console.log("filteredServiceCharge", filteredServiceCharge);
-
         setNameTable(filteredOrderData.table.title);
         setOrderAll(filteredOrderData);
 
@@ -130,7 +116,10 @@ function App() {
         {/* Contents */}
         <div className="flex-grow pt-[67px] pb-[55px] transition-all duration-300 ease-in-out">
           {loading ? (
-            <SpawnLoading />
+            <SpawnLoading
+              api_path={api_path}
+              logo={generalInfoMap.web_logo?.info_link}
+            />
           ) : (
             <Routes>
               <Route path="/" element={<Navigate to="/index" />} />

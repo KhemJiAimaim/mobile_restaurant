@@ -58,7 +58,7 @@ const FooterComponent = ({ onEmployeeClick, nameTable, catePage }) => {
                 className="w-full h-full"
               />
             </figure>
-            <p className="text-sm">พนักงาน</p>
+            <p className="text-sm">เรียกพนักงาน</p>
           </div>
 
           {/* 2 */}
