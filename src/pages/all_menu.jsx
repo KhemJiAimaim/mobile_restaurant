@@ -78,7 +78,7 @@ function all_menu({ api_path, foods, cateFoods, isDataLoaded, setCatePage }) {
                         <img
                           src={api_path + item.thumbnail}
                           alt={item.title}
-                          className="w-full h-full"
+                          className="w-full h-full object-cover"
                         />
                       </figure>
                       <p className="font-[500] md:text-base text-sm text-black">

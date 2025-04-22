@@ -3,7 +3,7 @@ import { useLocation, Link } from "react-router-dom";
 import ListOrders from "./component/listOrders";
 import StatusOrders from "./component/statusOrders";
 
-function Cart({ onOrder, api_path, orderAll }) {
+function Cart({ onOrder, api_path, orderAll, setRefreshData }) {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("orders");
 
@@ -48,9 +48,13 @@ function Cart({ onOrder, api_path, orderAll }) {
       </div>
 
       {/* Content */}
-      <div className="max-h-full pt-[30px] md:px-6 px-4">
+      <div className="max-h-full pt-[65px] md:px-6 px-4">
         {activeTab === "orders" && (
-          <ListOrders onOrderToKitchen={onOrder} api_path={api_path} />
+          <ListOrders
+            onOrderToKitchen={onOrder}
+            api_path={api_path}
+            setRefreshData={setRefreshData}
+          />
         )}
         {activeTab === "status" && (
           <StatusOrders api_path={api_path} orderAll={orderAll} />

@@ -76,7 +76,7 @@ const FooterComponent = ({
                 className="w-full h-full"
               />
             </figure>
-            <p className="text-xl font-[600]">: {nameTable}</p>
+            <p className="md:text-xl text-md font-[600]">: {nameTable}</p>
           </div>
 
           {/* 3 */}

@@ -14,10 +14,10 @@ const StatusOrders = ({ api_path, orderAll }) => {
 
   const reducedHeight =
     window.innerWidth >= 768
-      ? height - 300
+      ? height - 315
       : window.innerWidth >= 360
-      ? height - 290
-      : height - 200;
+      ? height - 305
+      : height - 215;
 
   const formatNumber = (num) =>
     Number(num).toLocaleString("en-US", {

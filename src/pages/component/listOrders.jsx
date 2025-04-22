@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { getAddOrderFood } from "../services/orderfood.service";
 
-const ListOrders = ({ onOrderToKitchen, api_path }) => {
+const ListOrders = ({ onOrderToKitchen, api_path, setRefreshData }) => {
   // const [count, setCount] = useState(0);
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
@@ -18,10 +18,10 @@ const ListOrders = ({ onOrderToKitchen, api_path }) => {
 
   const reducedHeight =
     window.innerWidth >= 768
-      ? height - 250
+      ? height - 265
       : window.innerWidth >= 360
-      ? height - 240
-      : height - 200;
+      ? height - 255
+      : height - 215;
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -95,6 +95,7 @@ const ListOrders = ({ onOrderToKitchen, api_path }) => {
       if (res.status) {
         onOrderToKitchen();
         console.log("คำสั่งถูกส่งไปครัว");
+        setRefreshData((prev) => prev + 1);
       } else {
         console.log("เกิดข้อผิดพลาดบางอย่าง");
       }

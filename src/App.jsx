@@ -208,6 +208,7 @@ function App() {
                       onOrder={handleLoadingOrderClick}
                       api_path={api_path}
                       orderAll={orderAll}
+                      setRefreshData={setRefreshData}
                     />
                   )
                 }
