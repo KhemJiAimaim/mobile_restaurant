@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { foodDetail } from "./component/data";
 import dayjs from "dayjs";
 import "dayjs/locale/th";
+import Cookies from "js-cookie";
 
 const Payment = ({
   api_path,
@@ -10,6 +11,7 @@ const Payment = ({
   generalInfoMap,
   contactInfoMap,
   taxAndServiceMap,
+  onCheckBill,
 }) => {
   const [height, setHeight] = useState(window.innerHeight);
 
@@ -30,7 +32,7 @@ const Payment = ({
       : Number(taxAndServiceMap?.tax_rate?.info_value) > 0 ||
         Number(taxAndServiceMap?.service_rate?.info_value) > 0
       ? window.innerWidth >= 768
-        ? height - 610
+        ? height - 625
         : window.innerWidth >= 360
         ? height - 510
         : height - 400
@@ -219,7 +221,7 @@ const Payment = ({
 
         <div
           className="bg-[#F44D4D] rounded-lg w-[224px] p-1 mx-auto flex justify-center items-center gap-2 cursor-pointer"
-          onClick={onPaymentClick}
+          onClick={() => onPaymentClick(() => onCheckBill(2))}
         >
           <p className="text-white text-xl font-[500]">ยืนยันชำระเงิน</p>
         </div>

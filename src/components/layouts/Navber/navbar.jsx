@@ -58,9 +58,12 @@ function NavbarComponent({ api_path, foods, logo }) {
     };
   }, []);
 
+  // <div className="bg-[#313131] md:px-6 px-4 py-4 max-w-[768px] shadow-sm relative"></div>
+  // <div className="bg-[#313131] md:px-6 px-4 py-4 max-w-[768px] max-h-[70px] shadow-sm relative flex justify-center items-center"></div>
+
   return (
     <>
-      <div className="bg-[#313131] md:px-6 px-4 py-4 max-w-[768px] max-h-[70px] shadow-sm relative flex justify-center items-center">
+      <div className="bg-[#313131] md:px-6 px-4 py-4 max-w-[768px] shadow-sm relative">
         <div className="flex flex-row gap-1 justify-between items-center w-full mx-auto">
           <div className="flex-shrink-0 max-w-[75px] w-full">
             <Link to="/" className="xxs:w-[75px] w-[60px] h-auto">

@@ -48,7 +48,7 @@ function Cart({ onOrder, api_path, orderAll }) {
       </div>
 
       {/* Content */}
-      <div className="max-h-full pt-[60px] md:px-6 px-4">
+      <div className="max-h-full pt-[30px] md:px-6 px-4">
         {activeTab === "orders" && (
           <ListOrders onOrderToKitchen={onOrder} api_path={api_path} />
         )}

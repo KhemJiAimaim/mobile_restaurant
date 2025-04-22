@@ -1,7 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import Cookies from "js-cookie";
 
-const FooterComponent = ({ onEmployeeClick, nameTable, catePage }) => {
+const FooterComponent = ({
+  onEmployeeClick,
+  nameTable,
+  catePage,
+  onCallStaff,
+}) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [openLang, setOpenLang] = useState(false);
   const langRef = useRef(null);
@@ -48,7 +54,7 @@ const FooterComponent = ({ onEmployeeClick, nameTable, catePage }) => {
         <div className="grid grid-cols-3 items-center w-full">
           {/* 1 */}
           <div
-            onClick={onEmployeeClick}
+            onClick={() => onEmployeeClick(() => onCallStaff(1))}
             className="flex flex-col justify-start items-center cursor-pointer mr-auto"
           >
             <figure className="w-[30px] h-[30px]">

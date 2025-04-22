@@ -18,6 +18,7 @@ import { getCategoriesAndFoods } from "./pages/services/cateandfood.service";
 import { getStatusFoodOrders } from "./pages/services/orderfood.service";
 import Cookies from "js-cookie";
 import { getWebInfoData } from "./pages/services/webinfo.service";
+import { callStaff } from "./pages/services/callstaff.service";
 
 function App() {
   const api_path = "http://localhost:8003";
@@ -39,6 +40,9 @@ function App() {
     const fetchData = async () => {
       const decoded = Cookies.get("decoded");
       const tableInfo = JSON.parse(decoded);
+
+      console.log(tableInfo);
+
       try {
         const resCateFoodAndFood = await getCategoriesAndFoods();
         setFoods(resCateFoodAndFood.foods);
@@ -84,11 +88,14 @@ function App() {
   });
 
   // Handle general loading state for any button or action
-  const handleLoadingClick = () => {
+  const handleLoadingClick = (callback) => {
     setLoading(true);
+    if (typeof callback === "function") {
+      callback();
+    }
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 2500);
   };
 
   const handleLoadingOrderClick = () => {
@@ -99,6 +106,25 @@ function App() {
     setTimeout(() => {
       setLoadingOrder(false);
     }, 1000);
+  };
+
+  const onCallStaff = (callType) => {
+    const token = Cookies.get("token");
+    const params = {
+      call_staff: callType, // 1.เรียกพนักงาน , 2.เช็คบิล
+      token: token,
+    };
+    callStaff(params).then((res) => {
+      if (res.status) {
+        if (callType === 1) {
+          console.log("✅ เรียกพนักงานเรียบร้อยแล้ว");
+        } else if (callType === 2) {
+          console.log("✅ เรียกเก็บเงินเรียบร้อยแล้ว");
+        }
+      } else {
+        console.log("❌ เกิดข้อผิดพลาดในการเรียกพนักงาน");
+      }
+    });
   };
 
   return (
@@ -114,7 +140,7 @@ function App() {
         </div>
 
         {/* Contents */}
-        <div className="flex-grow pt-[67px] pb-[55px] transition-all duration-300 ease-in-out">
+        <div className="flex-grow pt-[80px] pb-[55px] transition-all duration-300 ease-in-out">
           {loading ? (
             <SpawnLoading
               api_path={api_path}
@@ -197,6 +223,7 @@ function App() {
                     generalInfoMap={generalInfoMap}
                     contactInfoMap={contactInfoMap}
                     taxAndServiceMap={taxAndServiceMap}
+                    onCheckBill={onCallStaff}
                   />
                 }
               />
@@ -210,6 +237,7 @@ function App() {
             onEmployeeClick={handleLoadingClick}
             nameTable={nameTable}
             catePage={catePage}
+            onCallStaff={onCallStaff}
           />
         </div>
       </div>
