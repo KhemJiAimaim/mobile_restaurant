@@ -2,14 +2,35 @@ import React, { useEffect, useState } from "react";
 import { foodDetail } from "../component/data";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import { io } from "socket.io-client";
 
 const StatusOrders = ({ api_path, orderAll }) => {
   const [height, setHeight] = useState(window.innerHeight);
+  const [orders, setOrders] = useState(orderAll?.orderList || []);
+
+  useEffect(() => {
+    if (orderAll?.orderList) {
+      setOrders(orderAll.orderList);
+    }
+  }, [orderAll]);
 
   useEffect(() => {
     const updateSize = () => setHeight(window.innerHeight);
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  useEffect(() => {
+    const socket = io("http://localhost:5003");
+
+    socket.on("newOrder", (data) => {
+      console.log("📦 รับ newOrder จาก socket:", data);
+      setOrders(data.orderListUpdate);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const reducedHeight =
@@ -38,9 +59,17 @@ const StatusOrders = ({ api_path, orderAll }) => {
   //   return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
   // });
 
-  const sortedFoodDetail = (orderAll?.orderList || []).sort(
-    (a, b) => Number(a.status) - Number(b.status)
-  );
+  // const sortedFoodDetail = (orderAll?.orderList || []).sort(
+  //   (a, b) => Number(a.status) - Number(b.status)
+  // );
+
+  // const sortedFoodDetail = (orders || []).sort(
+  //   (a, b) => Number(a.status) - Number(b.status)
+  // );
+
+  const sortedFoodDetail = (orders || [])
+    .filter((item) => item && item.food)
+    .sort((a, b) => Number(a.status) - Number(b.status));
 
   // const totals = foodDetail.reduce(
   //   (accumulator, row) => {
