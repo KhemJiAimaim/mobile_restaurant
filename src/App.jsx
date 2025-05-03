@@ -19,9 +19,9 @@ import { getStatusFoodOrders } from "./pages/services/orderfood.service";
 import Cookies from "js-cookie";
 import { getWebInfoData } from "./pages/services/webinfo.service";
 import { callStaff } from "./pages/services/callstaff.service";
+import { api_path } from "./pages/store/setting";
 
 function App() {
-  const api_path = "http://localhost:8003";
   const [loading, setLoading] = useState(false);
   const [loadingOrder, setLoadingOrder] = useState(false);
   const [foods, setFoods] = useState([]);
@@ -36,39 +36,40 @@ function App() {
   const [taxAndService, setTaxAndService] = useState([]);
   const [catePage, setCatePage] = useState(0);
 
+  const fetchData = async () => {
+    const decoded = Cookies.get("decoded");
+    const tableInfo = JSON.parse(decoded);
+
+    console.log(tableInfo);
+
+    try {
+      const resCateFoodAndFood = await getCategoriesAndFoods();
+      setFoods(resCateFoodAndFood.foods);
+      setCateFoods(resCateFoodAndFood.categories);
+      setCateCount(resCateFoodAndFood.categories.length);
+      setCatePage(resCateFoodAndFood.categories[0].id);
+
+      const resOrder = await getStatusFoodOrders();
+
+      const filteredOrderData = resOrder.orderAll.find(
+        (order) => order.table_id === tableInfo.table_id
+      );
+
+      const webInfoAll = await getWebInfoData();
+      setGeneralWebInfo(webInfoAll.generalWebInfo);
+      setContactWebInfo(webInfoAll.contactWebInfo);
+      setTaxAndService(webInfoAll.taxAndService);
+      setNameTable(filteredOrderData.table.title);
+      setOrderAll(filteredOrderData);
+
+      setIsDataLoaded(true);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsDataLoaded(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const decoded = Cookies.get("decoded");
-      const tableInfo = JSON.parse(decoded);
-
-      console.log(tableInfo);
-
-      try {
-        const resCateFoodAndFood = await getCategoriesAndFoods();
-        setFoods(resCateFoodAndFood.foods);
-        setCateFoods(resCateFoodAndFood.categories);
-        setCateCount(resCateFoodAndFood.categories.length);
-        setCatePage(resCateFoodAndFood.categories[0].id);
-
-        const resOrder = await getStatusFoodOrders();
-
-        const filteredOrderData = resOrder.orderAll.find(
-          (order) => order.table_id === tableInfo.table_id
-        );
-
-        const webInfoAll = await getWebInfoData();
-        setGeneralWebInfo(webInfoAll.generalWebInfo);
-        setContactWebInfo(webInfoAll.contactWebInfo);
-        setTaxAndService(webInfoAll.taxAndService);
-        setNameTable(filteredOrderData.table.title);
-        setOrderAll(filteredOrderData);
-
-        setIsDataLoaded(true);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setIsDataLoaded(false);
-      }
-    };
     fetchData();
   }, [refreshData]);
 
@@ -209,6 +210,7 @@ function App() {
                       api_path={api_path}
                       orderAll={orderAll}
                       setRefreshData={setRefreshData}
+                      fetchData={fetchData}
                     />
                   )
                 }

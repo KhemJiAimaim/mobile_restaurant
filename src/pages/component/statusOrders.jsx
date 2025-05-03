@@ -3,16 +3,11 @@ import { foodDetail } from "../component/data";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import { io } from "socket.io-client";
+import { socket_path } from "../store/setting";
 
-const StatusOrders = ({ api_path, orderAll }) => {
+const StatusOrders = ({ api_path, orderAll, fetchData }) => {
   const [height, setHeight] = useState(window.innerHeight);
   const [orders, setOrders] = useState(orderAll?.orderList || []);
-
-  useEffect(() => {
-    if (orderAll?.orderList) {
-      setOrders(orderAll.orderList);
-    }
-  }, [orderAll]);
 
   useEffect(() => {
     const updateSize = () => setHeight(window.innerHeight);
@@ -21,15 +16,27 @@ const StatusOrders = ({ api_path, orderAll }) => {
   }, []);
 
   useEffect(() => {
-    const socket = io("http://localhost:5003");
+    if (orderAll?.orderList) {
+      setOrders(orderAll.orderList);
+    }
+  }, [orderAll]);
 
-    socket.on("newOrder", (data) => {
-      console.log("📦 รับ newOrder จาก socket:", data);
-      setOrders(data.orderListUpdate);
+  useEffect(() => {
+    const socket = io(socket_path);
+
+    // socket.on("newOrder", (data) => {
+    //   console.log("📦 รับ newOrder จาก socket:", data);
+    //   setOrders(data.orderListUpdate);
+    // });
+
+    socket.on("newOrder", () => {
+      console.log("📦 รับ newOrder จาก socket:");
+      fetchData();
     });
 
     return () => {
-      socket.disconnect();
+      socket.off("newOrder", fetchData());
+      // socket.disconnect();
     };
   }, []);
 
@@ -84,6 +91,22 @@ const StatusOrders = ({ api_path, orderAll }) => {
   // );
   // const finalPrice = totals.price - totals.specialPrice;
 
+  console.log("orders", orders);
+  console.log("sortedFoodDetail", sortedFoodDetail);
+
+  const totalDiscountPrice = sortedFoodDetail
+    .filter((item) => item && (item.status === "5" || item.status === "6"))
+    .reduce((sum, item) => {
+      const priceToUse =
+        Number(item.food.special_price) > 0
+          ? Number(item.food.special_price)
+          : Number(item.food.price);
+      return sum + priceToUse;
+    }, 0);
+
+    console.log("orderAll.price",orderAll.price)
+    console.log("totalDiscountPrice",totalDiscountPrice)
+
   return (
     <>
       <div className="h-full flex flex-col justify-between gap-2">
@@ -118,6 +141,9 @@ const StatusOrders = ({ api_path, orderAll }) => {
                     <div className="flex flex-row justify-between items-start w-full gap-2">
                       <p className="text-base font-[500] w-full md:h-[50px]">
                         {item.food.name}
+                      </p>
+                      <p className="text-base font-[500] md:h-[50px]">
+                        ×{item.amount}
                       </p>
 
                       {/* <div className="w-[25px] h-auto">
