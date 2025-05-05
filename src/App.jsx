@@ -40,19 +40,24 @@ function App() {
     const decoded = Cookies.get("decoded");
     const tableInfo = JSON.parse(decoded);
 
-    console.log(tableInfo);
+    console.log("tableInfo",tableInfo);
 
     try {
       const resCateFoodAndFood = await getCategoriesAndFoods();
+
+      console.log("resCateFoodAndFood",resCateFoodAndFood)
+      
+
       setFoods(resCateFoodAndFood.foods);
       setCateFoods(resCateFoodAndFood.categories);
       setCateCount(resCateFoodAndFood.categories.length);
       setCatePage(resCateFoodAndFood.categories[0].id);
 
       const resOrder = await getStatusFoodOrders();
+      console.log("resOrder",resOrder)
 
       const filteredOrderData = resOrder.orderAll.find(
-        (order) => order.table_id === tableInfo.table_id
+        (order) => order.id === tableInfo.order_id
       );
 
       const webInfoAll = await getWebInfoData();

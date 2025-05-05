@@ -94,18 +94,18 @@ const StatusOrders = ({ api_path, orderAll, fetchData }) => {
   console.log("orders", orders);
   console.log("sortedFoodDetail", sortedFoodDetail);
 
-  const totalDiscountPrice = sortedFoodDetail
-    .filter((item) => item && (item.status === "5" || item.status === "6"))
+  const totalPrice = sortedFoodDetail
+    .filter((item) => item && (item.status !== "5" && item.status !== "6"))
     .reduce((sum, item) => {
       const priceToUse =
         Number(item.food.special_price) > 0
-          ? Number(item.food.special_price)
-          : Number(item.food.price);
+          ? Number(item.food.special_price * item.amount)
+          : Number(item.food.price * item.amount);
       return sum + priceToUse;
     }, 0);
 
     console.log("orderAll.price",orderAll.price)
-    console.log("totalDiscountPrice",totalDiscountPrice)
+    console.log("totalDiscountPrice",totalPrice)
 
   return (
     <>
@@ -196,7 +196,7 @@ const StatusOrders = ({ api_path, orderAll, fetchData }) => {
         <div className="flex justify-between w-full mt-4 ">
           <p className="text-[20px] font-[500]">ยอดรวมทั้งหมด</p>
           <p className="text-[20px] font-[600]">
-            {formatNumber(orderAll.price)} ฿
+            {formatNumber(totalPrice)} ฿
           </p>
         </div>
 
