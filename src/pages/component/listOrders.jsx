@@ -212,7 +212,7 @@ const ListOrders = ({ onOrderToKitchen, api_path, setRefreshData }) => {
           </div>
 
           <button
-            className="bg-[#F44D4D] rounded-lg w-[180px] p-1 mx-auto flex justify-center items-center gap-2"
+            className="bg-[#F44D4D] disabled:opacity-50 rounded-lg w-[180px] p-1 mx-auto flex justify-center items-center gap-2"
             onClick={handleOrderClick}
             disabled={cartItems.length === 0}
           >

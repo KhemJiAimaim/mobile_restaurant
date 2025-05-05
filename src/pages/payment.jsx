@@ -183,19 +183,6 @@ const Payment = ({
             </p>
           </div>
 
-          {Number(taxAndServiceMap?.tax_rate?.info_value) !== 0 &&
-            Number(taxAndServiceMap?.tax_rate?.info_value) !== null && (
-              <div className="flex justify-between">
-                <p className="text-[14px] font-[500]">
-                  {taxAndServiceMap?.tax_rate?.info_title}{" "}
-                  {taxAndServiceMap?.tax_rate?.info_value}%
-                </p>
-                <p className="text-[14px] font-[400]">
-                  {formatNumber(taxPrice)} ฿
-                </p>
-              </div>
-            )}
-
           {Number(taxAndServiceMap?.service_rate?.info_value) !== 0 &&
             Number(taxAndServiceMap?.service_rate?.info_value) !== null && (
               <div className="flex justify-between">
@@ -209,22 +196,42 @@ const Payment = ({
               </div>
             )}
 
+          {Number(taxAndServiceMap?.tax_rate?.info_value) !== 0 &&
+            Number(taxAndServiceMap?.tax_rate?.info_value) !== null && (
+              <div className="flex justify-between">
+                <p className="text-[14px] font-[500]">
+                  {taxAndServiceMap?.tax_rate?.info_title}{" "}
+                  {taxAndServiceMap?.tax_rate?.info_value}%
+                </p>
+                <p className="text-[14px] font-[400]">
+                  {formatNumber(taxPrice)} ฿
+                </p>
+              </div>
+            )}
+
           <div className="border-t-2 border-[#CACACA] border-dashed"></div>
         </div>
 
         <div className="flex flex-row justify-between w-full">
           <p className="text-lg font-[500]">ยอดทั้งหมด</p>
-          {totalPrice !== 0 && totalPrice !== null && (
-            <p className="text-lg font-[500]">{formatNumber(totalPrice)} ฿</p>
-          )}
+          {/* {totalPrice !== 0 && totalPrice !== null && ( */}
+          <p className="text-lg font-[500]">{formatNumber(totalPrice)} ฿</p>
+          {/* )} */}
         </div>
 
-        <div
+        {/* <div
           className="bg-[#F44D4D] rounded-lg w-[224px] p-1 mx-auto flex justify-center items-center gap-2 cursor-pointer"
           onClick={() => onPaymentClick(() => onCheckBill(2))}
         >
           <p className="text-white text-xl font-[500]">ยืนยันชำระเงิน</p>
-        </div>
+        </div> */}
+        <button
+          className="bg-[#F44D4D] disabled:opacity-50 rounded-lg w-[224px] p-1 mx-auto flex justify-center items-center gap-2 text-white text-xl font-[500]"
+          disabled={!(orderAll?.orderList?.length > 0)}
+          onClick={() => onPaymentClick(() => onCheckBill(2))}
+        >
+          ยืนยันชำระเงิน
+        </button>
       </div>
     </div>
   );
