@@ -3,7 +3,7 @@ import { foodDetail } from "../component/data";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import { io } from "socket.io-client";
-import { socket_path } from "../store/setting";
+import { socketPath } from "../store/setting";
 
 const StatusOrders = ({ api_path, orderAll, fetchData }) => {
   const [height, setHeight] = useState(window.innerHeight);
@@ -22,7 +22,7 @@ const StatusOrders = ({ api_path, orderAll, fetchData }) => {
   }, [orderAll]);
 
   useEffect(() => {
-    const socket = io(socket_path);
+    const socket = io(socketPath);
 
     // socket.on("newOrder", (data) => {
     //   console.log("📦 รับ newOrder จาก socket:", data);
