@@ -19,9 +19,9 @@ import { getStatusFoodOrders } from "./pages/services/orderfood.service";
 import Cookies from "js-cookie";
 import { getWebInfoData } from "./pages/services/webinfo.service";
 import { callStaff } from "./pages/services/callstaff.service";
+import { api_path } from "./pages/store/setting";
 
 function App() {
-  const api_path = "http://localhost:8003";
   const [loading, setLoading] = useState(false);
   const [loadingOrder, setLoadingOrder] = useState(false);
   const [foods, setFoods] = useState([]);
